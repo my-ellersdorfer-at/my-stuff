@@ -209,6 +209,9 @@
                         <rule>
                         </rule>
                     </rules>
+                    <formats>
+                        <format>XML</format>
+                    </formats>
                 </configuration>
                 <executions>
                     <execution>
