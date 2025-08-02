@@ -21,12 +21,15 @@
         <frontend-maven-plugin.npmVersion>10.8.1</frontend-maven-plugin.npmVersion>
         <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
-        <lombok.version>1.18.38</lombok.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
+        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
+        <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <openapi-generator-maven-plugin.version>7.14.0</openapi-generator-maven-plugin.version>
         <org.springdoc.version>2.8.9</org.springdoc.version>
         <spring-boot.version>3.5.4</spring-boot.version>
@@ -36,6 +39,8 @@
     </properties>
 
     <modules>
+        <module>acceptance</module>
+        <module>domain</module>
     </modules>
 
     <dependencyManagement>
@@ -46,13 +51,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
             </dependency>
 
             <dependency>
@@ -127,6 +125,26 @@
                     <groupId>org.openapitools</groupId>
                     <artifactId>openapi-generator-maven-plugin</artifactId>
                     <version>${openapi-generator-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
