@@ -2,8 +2,8 @@ package at.steell.mystuff.acceptance.scenario;
 
 import at.steell.mystuff.acceptance.driver.DomainDriver;
 
-class DomainAcceptanceTest extends AbstractMyStuffAcceptanceTest {
-    DomainAcceptanceTest() {
+class AssetDomainAcceptanceTest extends AbstractAssetAcceptanceTest {
+    AssetDomainAcceptanceTest() {
         super(new DomainDriver());
     }
 }

@@ -4,10 +4,10 @@ import at.steell.mystuff.acceptance.driver.MyStuffAcceptanceDriver;
 import at.steell.mystuff.acceptance.dsl.MyStuffAcceptanceDsl.AssetOptions;
 import org.junit.jupiter.api.Test;
 
-public abstract class AbstractMyStuffAcceptanceTest {
+public abstract class AbstractAssetAcceptanceTest {
     private final MyStuffAcceptanceDriver driver;
 
-    public AbstractMyStuffAcceptanceTest(final MyStuffAcceptanceDriver aDriver) {
+    public AbstractAssetAcceptanceTest(final MyStuffAcceptanceDriver aDriver) {
         driver = aDriver;
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractMyStuffAcceptanceTest {
     }
 
     @Test
-    void createAssetUnauthenticatedCannotRead() {
+    void unauthenticatedCannotRead() {
         String assetId = createAssetWithUser("User A", "Test Asset");
         driver.assertThatAssetExists(assetId);
         driver.unauthenticateUser();
@@ -44,7 +44,7 @@ public abstract class AbstractMyStuffAcceptanceTest {
     }
 
     @Test
-    void createAssetOtherCannotRead() {
+    void otherCannotRead() {
         String assetId = createAssetWithUser("User A", "Test Asset");
         driver.assertThatAssetExists(assetId);
         driver.authenticateAsUser("User B");
