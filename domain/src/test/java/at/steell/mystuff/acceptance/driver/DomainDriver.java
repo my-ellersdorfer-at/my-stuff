@@ -4,30 +4,49 @@ import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.interactor.AssetInteractor;
 
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DomainDriver implements MyStuffAcceptanceDriver {
+    private static final Logger LOGGER = Logger.getLogger(DomainDriver.class.getName());
     private final AssetInteractor assetInteractor = new AssetInteractor();
+
+    private String currentUsername = null;
 
     @Override
     public void authenticateAsUser(final String username) {
-
+        currentUsername = username;
+        LOGGER.info("authenticating as user " + username);
+        assertEquals(username, currentUsername);
     }
 
     @Override
     public void unauthenticateUser() {
-
+        LOGGER.info("unauthenticating " + currentUsername);
+        currentUsername = null;
     }
 
     @Override
     public void assertThatUserIsAuthenticated(final String username) {
+        LOGGER.info("authenticated user: " + currentUsername
+            + ", asserted user: " + username);
+        assertEquals(currentUsername, username);
+    }
 
+    private void npeIfCurrentUserName_null() {
+        if (currentUsername == null) {
+            throw new NullPointerException();
+        }
     }
 
     @Override
     public String createAsset(final AssetOptions assetOptions) {
+        currentUsername = assetOptions.authenticatedUser();
+        npeIfCurrentUserName_null();
         return assetInteractor.createAsset();
     }
 
@@ -40,11 +59,11 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
 
     @Override
     public void assertAssetNotReadable(final String assetId) {
-
+        LOGGER.info("asserting asset not readable: " + assetId);
     }
 
     @Override
     public void assertExceptional(final Supplier<?> action) {
-
+        assertThrows(Exception.class, action::get);
     }
 }
