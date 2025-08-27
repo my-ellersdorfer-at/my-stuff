@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AssetTest {
     @Test
-    public void createAsset() {
+    void createAsset() {
         Asset asset = Asset.createAsset();
         assertNotNull(asset);
         assertNotNull(asset.getId());
     }
 
     @Test
-    public void setAssetName() {
+    void setAssetName() {
         String newName = "New Asset Name";
         Asset asset = Asset.createAsset().nameAsset(newName);
         assertNotNull(asset);
