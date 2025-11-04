@@ -2,21 +2,26 @@ package at.steell.mystuff.domain.entity;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AssetTest {
     @Test
     void createAsset() {
-        Asset asset = Asset.createAsset();
+        String owner = UUID.randomUUID().toString();
+        Asset asset = Asset.createAsset(owner);
         assertNotNull(asset);
         assertNotNull(asset.getId());
+        assertEquals(owner, asset.getOwner());
     }
 
     @Test
     void setAssetName() {
         String newName = "New Asset Name";
-        Asset asset = Asset.createAsset().nameAsset(newName);
+        Asset asset = Asset.createAsset(UUID.randomUUID().toString())
+            .nameAsset(newName);
         assertNotNull(asset);
         assertEquals(newName, asset.getName());
     }

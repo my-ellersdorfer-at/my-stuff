@@ -1,6 +1,7 @@
 package at.steell.mystuff.acceptance.driver;
 
 import at.steell.mystuff.domain.entity.Asset;
+import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor;
 
 import java.util.function.Supplier;
@@ -46,19 +47,19 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
     public String createAsset(final AssetOptions assetOptions) {
         currentUsername = assetOptions.authenticatedUser();
         npeIfCurrentUserName_null();
-        return assetInteractor.createAsset();
+        return assetInteractor.createAsset(assetOptions.authenticatedUser());
     }
 
     @Override
     public void assertThatAssetExists(final String assetId) {
-        Asset asset = assetInteractor.find(assetId);
+        Asset asset = assetInteractor.find(assetId, currentUsername);
         assertNotNull(asset);
         assertEquals(assetId, asset.getId());
     }
 
     @Override
     public void assertAssetNotReadable(final String assetId) {
-        LOGGER.info("asserting asset not readable: " + assetId);
+        assertThrows(NotReadable.class, () -> assetInteractor.find(assetId, null));
     }
 
     @Override

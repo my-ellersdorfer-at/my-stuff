@@ -1,6 +1,7 @@
 package at.steell.mystuff.domain.interactor;
 
 import at.steell.mystuff.domain.entity.Asset;
+import at.steell.mystuff.domain.exception.NotReadable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +9,8 @@ import java.util.Map;
 public class AssetInteractor {
     private final Map<String, Asset> assets = new HashMap<>();
 
-    public String createAsset() {
-        Asset asset = Asset.createAsset();
+    public String createAsset(final String owner) {
+        Asset asset = Asset.createAsset(owner);
         assets.put(asset.getId(), asset);
         return asset.getId();
     }
@@ -27,14 +28,36 @@ public class AssetInteractor {
         }
     }
 
-    public Asset find(final String assetId) {
+    private void validateWithOwner(final String assetId, final String owner) {
+        if (owner == null || owner.isBlank()) {
+            throw new NotReadable(assetId);
+        }
+    }
+
+    private void validateAssetId(final String assetId) {
         if (assetId == null || assetId.isBlank()) {
             throw new IllegalArgumentException("Asset ID cannot be null/blank.");
         }
-        Asset asset = assets.get(assetId);
+    }
+
+    private void proofAssetExists(final Asset asset, final String assetId) {
         if (asset == null) {
             throw new AssetNotFound(assetId);
         }
+    }
+
+    private void proofOwnerOfAsset(final String assetId, final String owner, final Asset asset) {
+        if (!owner.equals(asset.getOwner())) {
+            throw  new NotReadable(assetId);
+        }
+    }
+
+    public Asset find(final String assetId, final String owner) {
+        validateWithOwner(assetId, owner);
+        validateAssetId(assetId);
+        Asset asset = assets.get(assetId);
+        proofAssetExists(asset, assetId);
+        proofOwnerOfAsset(assetId, owner, asset);
         return asset;
     }
 }
