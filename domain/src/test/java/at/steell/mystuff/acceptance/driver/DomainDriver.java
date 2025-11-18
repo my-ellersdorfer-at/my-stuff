@@ -59,7 +59,7 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
 
     @Override
     public void assertAssetNotReadable(final String assetId) {
-        assertThrows(NotReadable.class, () -> assetInteractor.find(assetId, null));
+        assertThrows(NotReadable.class, () -> assetInteractor.find(assetId, currentUsername));
     }
 
     @Override
