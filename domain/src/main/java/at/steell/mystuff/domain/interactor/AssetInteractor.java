@@ -1,10 +1,13 @@
 package at.steell.mystuff.domain.interactor;
 
 import at.steell.mystuff.domain.entity.Asset;
+import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AssetInteractor {
     private final Map<String, Asset> assets = new HashMap<>();
@@ -13,6 +16,15 @@ public class AssetInteractor {
         Asset asset = Asset.createAsset(owner);
         assets.put(asset.getId(), asset);
         return asset.getId();
+    }
+
+    public Collection<Asset> listAssets(final String authenticatedUser) {
+        if (authenticatedUser == null) {
+            throw new NotAvailable(null);
+        }
+        return assets.values().stream()
+            .filter(asset -> authenticatedUser.equals(asset.getOwner()))
+            .collect(Collectors.toSet());
     }
 
     public static class AssetNotFound extends RuntimeException {

@@ -51,4 +51,30 @@ public abstract class AbstractAssetAcceptanceTest {
         driver.assertAssetNotReadable(assetId);
     }
 
+    @Test
+    void listAssetsWithoutAuthentication_exceptional() {
+        driver.authenticateAsUser("User A");
+        driver.createAsset(new AssetOptions("Test Asset", "User A"));
+        driver.unauthenticateUser();
+        driver.assertExceptional(() -> driver.listUserAssets(null));
+    }
+
+
+    @Test
+    void listAssetsDifferentAuthentication_emptyResults() {
+        driver.authenticateAsUser("User A");
+        driver.createAsset(new AssetOptions("Test Asset", "User A"));
+        driver.unauthenticateUser();
+        driver.listUserAssets("User B");
+        driver.assertListOfAssetsSize(0);
+    }
+
+    @Test
+    void listAssets_containsCreated() {
+        String user = "User A";
+        driver.authenticateAsUser(user);
+        driver.createAsset(new AssetOptions("Test Asset", user));
+        driver.listUserAssets(user);
+        driver.assertListOfAssetsSize(1);
+    }
 }

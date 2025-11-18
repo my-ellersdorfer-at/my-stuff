@@ -20,4 +20,8 @@ public interface MyStuffAcceptanceDsl {
     void assertAssetNotReadable(String assetId);
 
     void assertExceptional(Supplier<?> action);
+
+    Void listUserAssets(String authenticatedUser);
+
+    void assertListOfAssetsSize(int elementCount);
 }

@@ -4,6 +4,8 @@ import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -16,6 +18,7 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
     private final AssetInteractor assetInteractor = new AssetInteractor();
 
     private String currentUsername = null;
+    private ThreadLocal<Collection<Asset>> currentAssets = ThreadLocal.withInitial(Set::of);
 
     @Override
     public void authenticateAsUser(final String username) {
@@ -65,5 +68,16 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
     @Override
     public void assertExceptional(final Supplier<?> action) {
         assertThrows(Exception.class, action::get);
+    }
+
+    @Override
+    public Void listUserAssets(final String authenticatedUser) {
+        currentAssets.set(assetInteractor.listAssets(authenticatedUser));
+        return null;
+    }
+
+    @Override
+    public void assertListOfAssetsSize(final int elementCount) {
+        assertEquals(elementCount, currentAssets.get().size());
     }
 }
