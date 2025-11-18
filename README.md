@@ -10,3 +10,8 @@ mvn -B clean verify jacoco:report --file pom.xml
 ```
 mvn versions:display-dependency-updates
 ```
+
+# update dependencies
+```
+mvn versions:update-properties -DgenerateBackupPoms=false versions:use-releases
+```
