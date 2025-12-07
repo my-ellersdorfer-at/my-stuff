@@ -8,4 +8,7 @@ public class MyStuffApplication {
     static void main(final String[] args) {
         SpringApplication.run(MyStuffApplication.class, args);
     }
+
+    private MyStuffApplication() {
+    }
 }
