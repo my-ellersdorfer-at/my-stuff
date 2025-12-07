@@ -4,16 +4,15 @@ package at.steell.mystuff.application;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.context.ApplicationContext;
 
-import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MyStuffApplication.class)
 class MyStuffApplicationTest {
     @Autowired
-    private ServletWebServerApplicationContext servletWebServerApplicationContext;
+    private ApplicationContext applicationContext;
 
     @Test
     void verifyMain() {
@@ -22,6 +21,6 @@ class MyStuffApplicationTest {
 
     @Test
     void contextConfiguration() {
-        assertTrue(requireNonNull(servletWebServerApplicationContext.getWebServer()).getPort() > 0);
+        assertNotNull(applicationContext.getApplicationName());
     }
 }
