@@ -45,3 +45,7 @@ build/
 
 ### OpenAPI generated sources ###
 frontend/src/generated
+
+ng-frontend/node_modules
+ng-frontend/src/generated
+

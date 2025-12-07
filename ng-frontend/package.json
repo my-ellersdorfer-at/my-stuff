@@ -1,0 +1,48 @@
+{
+  "name": "my-stuff",
+  "version": "1.0.0-SNAPSHOT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test --code-coverage",
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "lint": "ng lint",
+    "prettier": "npx prettier . --write --ignore-unknown",
+    "verify": "npm run prettier && ng lint && ng build && npm run test-headless"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "prettier": "3.7.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.8",
+    "@angular-eslint/builder": "21.0.1",
+    "@angular/cli": "^17.3.8",
+    "@angular/compiler-cli": "^17.3.0",
+    "@eslint/js": "^9.39.1",
+    "@types/jasmine": "~5.1.0",
+    "angular-eslint": "21.0.1",
+    "eslint": "^9.39.1",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.4.2",
+    "typescript-eslint": "8.46.4"
+  }
+}
