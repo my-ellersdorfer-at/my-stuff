@@ -1,0 +1,21 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    command: >
+      start-dev
+      --https-port=8443
+      --https-certificate-file=/certs/cert.pem
+      --https-certificate-key-file=/certs/key.pem
+      --hostname-strict=false
+      --hostname-strict-https=false
+      --hostname=localhost
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT_HTTPS: 'false'
+      KC_HOSTNAME_STRICT: 'false'
+    ports:
+      - "8443:8443"
+    restart: unless-stopped
+    volumes:
+      - ./certs:/certs:ro
