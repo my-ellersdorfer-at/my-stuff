@@ -44,6 +44,7 @@
         <module>domain</module>
         <module>application</module>
         <module>ng-frontend</module>
+        <module>ui-acceptance</module>
     </modules>
 
     <dependencyManagement>
@@ -263,6 +264,12 @@
                     <systemPropertyVariables>
                         <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
                     </systemPropertyVariables>
+                    <argLine>
+                        -Djavax.net.ssl.keyStore=${project.basedir}/../keystore/cacerts
+                        -Djavax.net.ssl.keyStorePassword=changeit
+                        -Djavax.net.ssl.trustStore=${project.basedir}/../keystore/cacerts
+                        -Djavax.net.ssl.trustStorePassword=changeit
+                    </argLine>
                 </configuration>
             </plugin>
         </plugins>

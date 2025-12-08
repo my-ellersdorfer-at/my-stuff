@@ -22,6 +22,11 @@ Generate certs manually if needed:
 mkdir -p certs && openssl req -x509 -newkey rsa:2048 -keyout certs/key.pem -out certs/cert.pem -days 365 -nodes -subj "/CN=localhost"
 ```
 
+# keystore
+generate keystore manually if needed:
+```bash
+mkdir -p keystore && keytool -import -alias localhost:8443 -keystore "./keystore/cacerts" -file "./certs/cert.pem" -keypass changeit -storepass changeit
+```
 # install ng-frontend
 ```
  ./ng-frontend: ng new my-stuff --directory . --package-manager=pnpm

@@ -1,0 +1,14 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          my-stuff:
+            provider: my-stuff
+            client-id: app
+            client-secret: s3e00DwywrOjCt0LXLlEzyMPecN8GXkp
+            authorization-grant-type: authorization_code
+            scope: openid,profile
+        provider:
+          my-stuff:
+            issuer-uri: https://localhost:8443/realms/my-stuff

@@ -126,6 +126,21 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
+                            <outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/dist/my-stuff/browser</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-frontend-to-application</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
                             <outputDirectory>${project.basedir}/../application/target/classes/static</outputDirectory>
                             <resources>
                                 <resource>

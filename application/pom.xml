@@ -36,6 +36,11 @@
             <artifactId>spring-beans</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,6 +53,40 @@
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -58,8 +97,56 @@
                 <configuration>
                     <ignoredNonTestScopedDependencies>
                         <ignoredNonTestScopedDependency>org.springframework:spring-beans</ignoredNonTestScopedDependency>
+                        <ignoredNonTestScopedDependency>org.springframework:spring-web</ignoredNonTestScopedDependency>
                     </ignoredNonTestScopedDependencies>
+                    <ignoredUnusedDeclaredDependencies>
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-security</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-oauth2-client</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-oauth2-client</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-web</ignoredUnusedDeclaredDependency>
+                    </ignoredUnusedDeclaredDependencies>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    <jvmArguments>
+                        -Djavax.net.ssl.keyStore=${project.basedir}/../keystore/cacerts
+                        -Djavax.net.ssl.keyStorePassword=changeit
+                        -Djavax.net.ssl.trustStore=${project.basedir}/../keystore/cacerts
+                        -Djavax.net.ssl.trustStorePassword=changeit
+                    </jvmArguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
