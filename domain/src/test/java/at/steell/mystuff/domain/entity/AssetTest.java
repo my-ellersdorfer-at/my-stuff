@@ -8,12 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AssetTest {
+    private Asset createDefaultAsset(final String owner) {
+        return Asset.createAsset(owner);
+    }
+
     @Test
     void createAsset() {
         String owner = UUID.randomUUID().toString();
-        Asset asset = Asset.createAsset(owner);
+        Asset asset = createDefaultAsset(owner);
         assertNotNull(asset);
         assertNotNull(asset.getId());
+    }
+
+    @Test
+    void createAsset_hasOwner() {
+        String owner = UUID.randomUUID().toString();
+        Asset asset = createDefaultAsset(owner);
         assertEquals(owner, asset.getOwner());
     }
 
