@@ -40,6 +40,7 @@
         <testcontainers-keycloak.version>4.0.0</testcontainers-keycloak.version>
 
         <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <modules>
@@ -95,6 +96,21 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report-aggregate</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>report-aggregate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -247,14 +263,19 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
+                    <outputDirectory>${project.basedir}/target/site/jacoco-aggregate</outputDirectory>
                     <rules>
-                        <!-- Code coverage metrics must fit the specified rules. Using an empty rule for now to make the verify phase working -->
                         <rule>
+                            <element>BUNDLE</element>
+                            <limits>
+                                <limit>
+                                    <counter>INSTRUCTION</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0.0</minimum>
+                                </limit>
+                            </limits>
                         </rule>
                     </rules>
-                    <formats>
-                        <format>XML</format>
-                    </formats>
                 </configuration>
                 <executions>
                     <execution>
@@ -273,6 +294,13 @@
                         <id>default-check</id>
                         <goals>
                             <goal>check</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>aggregate-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
                         </goals>
                     </execution>
                 </executions>
