@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MyStuffApplication.class)
 class MyStuffApplicationTest extends OauthTestSupport {
-    private static final String KEYCLOAK_REALM_CONFIGURATION = "keycloak/my-stuff.realm.json";
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 

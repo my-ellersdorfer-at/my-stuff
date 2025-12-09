@@ -12,6 +12,12 @@
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <sonar.coverage.exclusions>
+            src/main/java/at/steell/mystuff/application/MyStuffApplication.java
+        </sonar.coverage.exclusions>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>at.steell.mystuff</groupId>
