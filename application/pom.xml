@@ -14,6 +14,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>at.steell.mystuff</groupId>
+            <artifactId>acceptance</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
@@ -87,6 +95,28 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.dasniko</groupId>
+            <artifactId>testcontainers-keycloak</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -104,6 +134,11 @@
                         <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-oauth2-client</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-oauth2-client</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-web</ignoredUnusedDeclaredDependency>
+
+                        <ignoredUnusedDeclaredDependency>org.springframework:spring-test</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.testcontainers:testcontainers</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.testcontainers:junit-jupiter</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>com.github.dasniko:testcontainers-keycloak</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
                 </configuration>
             </plugin>
@@ -133,18 +168,6 @@
                         <configuration>
                             <classifier>exec</classifier>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>pre-integration-test</id>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

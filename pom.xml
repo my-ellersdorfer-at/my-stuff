@@ -35,6 +35,9 @@
         <org.springdoc.version>3.0.0</org.springdoc.version>
         <spring-boot.version>4.0.0</spring-boot.version>
         <springdoc-openapi-maven-plugin.version>1.5</springdoc-openapi-maven-plugin.version>
+        <testcontainers.version>2.0.2</testcontainers.version>
+        <testcontainers-junit-jupiter.version>1.21.3</testcontainers-junit-jupiter.version>
+        <testcontainers-keycloak.version>4.0.0</testcontainers-keycloak.version>
 
         <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
     </properties>
@@ -61,6 +64,24 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${org.springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${testcontainers-junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.dasniko</groupId>
+                <artifactId>testcontainers-keycloak</artifactId>
+                <version>${testcontainers-keycloak.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
