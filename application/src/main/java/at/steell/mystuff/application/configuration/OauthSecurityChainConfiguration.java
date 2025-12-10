@@ -42,7 +42,9 @@ public class OauthSecurityChainConfiguration {
         public boolean matches(final HttpServletRequest request) {
             Set<String> pathComponents = getPathComponents(request);
             for (final String route :ROUTES) {
-                return pathComponents.contains(route);
+                if (pathComponents.contains(route)) {
+                    return true;
+                }
             }
             return false;
         }
