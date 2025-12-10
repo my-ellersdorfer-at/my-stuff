@@ -1,3 +1,12 @@
+springdoc:
+  api-docs:
+    version: OPENAPI_3_1
+  open-api:
+    info:
+      title: ${spring.application.name}
+      version: ${project.version}
+  default-produces-media-type: application/json
+
 spring:
   security:
     oauth2:
