@@ -128,6 +128,36 @@
             <artifactId>spring-boot-webmvc</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -139,10 +169,11 @@
                     <ignoredNonTestScopedDependencies>
                         <ignoredNonTestScopedDependency>org.springframework:spring-beans</ignoredNonTestScopedDependency>
                         <ignoredNonTestScopedDependency>org.springframework:spring-web</ignoredNonTestScopedDependency>
+                        <ignoredNonTestScopedDependency>org.springframework.security:spring-security-oauth2-client</ignoredNonTestScopedDependency>
+                        <ignoredNonTestScopedDependency>com.fasterxml.jackson.core:jackson-databind</ignoredNonTestScopedDependency>
                     </ignoredNonTestScopedDependencies>
                     <ignoredUnusedDeclaredDependencies>
                         <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-security</ignoredUnusedDeclaredDependency>
-                        <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-oauth2-client</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-oauth2-client</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-web</ignoredUnusedDeclaredDependency>
 
