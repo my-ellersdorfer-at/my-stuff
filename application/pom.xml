@@ -201,6 +201,72 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>quay.io/keycloak/keycloak:23.0.7</name>
+                            <run>
+                                <ports>
+                                    <port>8443:8443</port>
+                                </ports>
+                                <env>
+                                    <KEYCLOAK_ADMIN>admin</KEYCLOAK_ADMIN>
+                                    <KEYCLOAK_ADMIN_PASSWORD>admin</KEYCLOAK_ADMIN_PASSWORD>
+                                    <KC_HOSTNAME_STRICT_HTTPS>'false'</KC_HOSTNAME_STRICT_HTTPS>
+                                    <KC_HOSTNAME_STRICT>'false'</KC_HOSTNAME_STRICT>
+                                </env>
+                                <volumes>
+                                    <bind>
+                                        <volume>
+                                            ${project.basedir}/../acceptance/src/test/resources/keycloak/my-stuff.realm.json:/opt/keycloak/data/import/realm-export.json
+                                        </volume>
+                                        <volume>
+                                            ${project.basedir}/../certs/cert.pem:/opt/keycloak/certs/cert.pem
+                                        </volume>
+                                        <volume>
+                                            ${project.basedir}/../certs/key.pem:/opt/keycloak/certs/key.pem
+                                        </volume>
+                                    </bind>
+                                </volumes>
+
+                                <cmd>start-dev
+                                    --import-realm
+                                    --https-port=8443
+                                    --https-certificate-file=/opt/keycloak/certs/cert.pem
+                                    --https-certificate-key-file=/opt/keycloak/certs/key.pem
+                                    --hostname-strict=false
+                                    --hostname-strict-https=false
+                                    --hostname=localhost
+                                </cmd>
+                                <wait>
+                                    <log>.*Keycloak.*started in.*</log>
+                                    <time>600000</time>
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-keycloak</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-keycloak</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
