@@ -1,5 +1,6 @@
 package at.steell.mystuff.domain.interactor;
 
+import at.steell.mystuff.domain.AssetStore;
 import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
@@ -7,24 +8,43 @@ import at.steell.mystuff.domain.exception.NotReadable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AssetInteractor {
-    private final Map<String, Asset> assets = new HashMap<>();
+    private final AssetStore assetStore = new InMemoryAssetStore();
+
+    private static final class InMemoryAssetStore implements AssetStore {
+        private final Map<String, Asset> assets = new HashMap<>();
+
+        @Override
+        public Asset get(final String assetId) {
+            return assets.get(assetId);
+        }
+
+        @Override
+        public String save(final Asset asset) {
+            assets.put(asset.getId(), asset);
+            return asset.getId();
+        }
+
+        @Override
+        public Set<Asset> getByOwner(final String owner) {
+            return assets.values().stream()
+                .filter(asset -> owner.equals(asset.getOwner()))
+                .collect(Collectors.toSet());
+        }
+    }
 
     public String createAsset(final String owner) {
-        Asset asset = Asset.createAsset(owner);
-        assets.put(asset.getId(), asset);
-        return asset.getId();
+        return assetStore.save(Asset.createAsset(owner));
     }
 
     public Collection<Asset> listAssets(final String authenticatedUser) {
         if (authenticatedUser == null) {
             throw new NotAvailable(null);
         }
-        return assets.values().stream()
-            .filter(asset -> authenticatedUser.equals(asset.getOwner()))
-            .collect(Collectors.toSet());
+        return assetStore.getByOwner(authenticatedUser);
     }
 
     public static class AssetNotFound extends RuntimeException {
@@ -67,7 +87,7 @@ public class AssetInteractor {
     public Asset find(final String assetId, final String owner) {
         validateWithOwner(assetId, owner);
         validateAssetId(assetId);
-        Asset asset = assets.get(assetId);
+        Asset asset = assetStore.get(assetId);
         proofAssetExists(asset, assetId);
         proofOwnerOfAsset(assetId, owner, asset);
         return asset;
