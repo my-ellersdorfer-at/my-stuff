@@ -22,7 +22,7 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
         .create();
 
     private String currentUsername = null;
-    private ThreadLocal<Collection<Asset>> currentAssets = ThreadLocal.withInitial(Set::of);
+    private final ThreadLocal<Collection<Asset>> currentAssets = ThreadLocal.withInitial(Set::of);
 
     @Override
     public void authenticateAsUser(final String username) {
