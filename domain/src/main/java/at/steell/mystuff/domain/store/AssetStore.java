@@ -1,4 +1,4 @@
-package at.steell.mystuff.domain;
+package at.steell.mystuff.domain.store;
 
 import at.steell.mystuff.domain.entity.Asset;
 

@@ -3,7 +3,9 @@ package at.steell.mystuff.domain.interactor;
 import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
+import at.steell.mystuff.domain.interactor.AssetInteractor.AssetInteractorFactory;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetNotFound;
+import at.steell.mystuff.domain.store.InMemoryAssetStore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AssetInteractorTest {
-    AssetInteractor interactor = new AssetInteractor();
+    AssetInteractor interactor = new AssetInteractorFactory()
+        .withAssetStore(new InMemoryAssetStore())
+        .create();
 
     @Test
     void instantiate() {

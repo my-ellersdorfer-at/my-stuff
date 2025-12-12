@@ -1,38 +1,29 @@
 package at.steell.mystuff.domain.interactor;
 
-import at.steell.mystuff.domain.AssetStore;
 import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
+import at.steell.mystuff.domain.store.AssetStore;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class AssetInteractor {
-    private final AssetStore assetStore = new InMemoryAssetStore();
+public final class AssetInteractor {
+    private final AssetStore assetStore;
 
-    private static final class InMemoryAssetStore implements AssetStore {
-        private final Map<String, Asset> assets = new HashMap<>();
+    private AssetInteractor(final AssetStore theAssetStore) {
+        assetStore = theAssetStore;
+    }
 
-        @Override
-        public Asset get(final String assetId) {
-            return assets.get(assetId);
+    public static final class AssetInteractorFactory {
+        private AssetStore assetStore;
+
+        public AssetInteractorFactory withAssetStore(final AssetStore arg) {
+            assetStore = arg;
+            return this;
         }
 
-        @Override
-        public String save(final Asset asset) {
-            assets.put(asset.getId(), asset);
-            return asset.getId();
-        }
-
-        @Override
-        public Set<Asset> getByOwner(final String owner) {
-            return assets.values().stream()
-                .filter(asset -> owner.equals(asset.getOwner()))
-                .collect(Collectors.toSet());
+        public AssetInteractor create() {
+            return new AssetInteractor(assetStore);
         }
     }
 

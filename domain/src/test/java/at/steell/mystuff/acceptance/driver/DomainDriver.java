@@ -3,6 +3,8 @@ package at.steell.mystuff.acceptance.driver;
 import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor;
+import at.steell.mystuff.domain.interactor.AssetInteractor.AssetInteractorFactory;
+import at.steell.mystuff.domain.store.InMemoryAssetStore;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DomainDriver implements MyStuffAcceptanceDriver {
     private static final Logger LOGGER = Logger.getLogger(DomainDriver.class.getName());
-    private final AssetInteractor assetInteractor = new AssetInteractor();
+    private final AssetInteractor assetInteractor = new AssetInteractorFactory()
+        .withAssetStore(new InMemoryAssetStore())
+        .create();
 
     private String currentUsername = null;
     private ThreadLocal<Collection<Asset>> currentAssets = ThreadLocal.withInitial(Set::of);
