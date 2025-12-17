@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -64,11 +65,15 @@ public class OauthSecurityChainConfiguration {
         return repository;
     }
 
+    private CsrfTokenRequestAttributeHandler spaCsrfTokenRequestAttributeHandler() {
+        CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
+        csrfRequestHandler.setCsrfRequestAttributeName(null); // NOSONAR: SPA reads token from cookie/header;
+        // avoid request attribute exposure.
+        return csrfRequestHandler;
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(final HttpSecurity http) {
-        CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
-        csrfRequestHandler.setCsrfRequestAttributeName(null);
-
         return http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(new CustomerRequestMatcher()).authenticated()
@@ -78,7 +83,7 @@ public class OauthSecurityChainConfiguration {
                     .policyDirectives(contentSecurityPolicyDirective())
                     .reportOnly()))
             .csrf(csrf -> csrf
-                .csrfTokenRequestHandler(csrfRequestHandler)
+                .csrfTokenRequestHandler(spaCsrfTokenRequestAttributeHandler())
                 .csrfTokenRepository(angularCsrfTokenRepository()))
             .oauth2Login(withDefaults())
             .build();
