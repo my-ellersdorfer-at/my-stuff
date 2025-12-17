@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'my-stuff';
+  readonly navItems = [
+    { label: 'Assets', route: '/assets/list' },
+    { label: 'Create', route: '/assets/create' },
+    { label: 'Lookup', route: '/assets/detail' },
+    { label: 'Me', route: '/me' },
+  ];
 }

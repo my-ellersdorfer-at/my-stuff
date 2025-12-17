@@ -1,0 +1,40 @@
+<section class="panel">
+  <header class="panel__header">
+    <div>
+      <p class="eyebrow">Create</p>
+      <h2>Spin up a new asset</h2>
+      <p class="muted">
+        Generate an asset entry with a single click. The backend returns the id
+        so you can look it up immediately.
+      </p>
+    </div>
+  </header>
+
+  <div class="callout">
+    <p class="muted">Asset records are created server-side without a form.</p>
+    <button
+      type="button"
+      class="primary"
+      data-testid="create-asset-button"
+      [disabled]="isSubmitting() || !isLoggedIn()"
+      (click)="create()"
+    >
+      {{ isSubmitting() ? "Creating…" : "Create asset" }}
+    </button>
+  </div>
+
+  @if (error() === "You need to sign in before creating assets.") {
+    <p class="muted">Please sign in to create new assets.</p>
+  }
+
+  @if (createdId()) {
+    <p class="success" data-testid="creation-result">
+      Asset created with id <span class="mono">{{ createdId() }}</span
+      >.
+    </p>
+  }
+
+  @if (error()) {
+    <p class="error" data-testid="creation-error">{{ error() }}</p>
+  }
+</section>

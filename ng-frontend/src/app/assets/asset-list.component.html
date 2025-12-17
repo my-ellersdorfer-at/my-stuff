@@ -1,0 +1,61 @@
+<section class="panel">
+  <header class="panel__header">
+    <div>
+      <p class="eyebrow">Assets</p>
+      <h2>Team inventory</h2>
+      <p class="muted">
+        Browse the assets currently tracked by the API. Refresh to pull the
+        latest state.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="primary"
+      (click)="refresh()"
+      [disabled]="!canUseAssets()"
+    >
+      Refresh
+    </button>
+  </header>
+
+  @if (!canUseAssets()) {
+    <p class="muted" data-testid="assets-auth-warning">
+      Sign in to view your assets.
+    </p>
+  }
+
+  @if (canUseAssets()) {
+    @if (isLoading()) {
+      <p class="muted">Loading assets…</p>
+    }
+
+    @if (!isLoading() && assets().length === 0) {
+      <p class="muted" data-testid="empty-assets">No assets yet.</p>
+    }
+
+    @if (assets().length > 0) {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (asset of assets(); track asset.id) {
+              <tr data-testid="asset-row">
+                <td>
+                  <span class="mono">{{ asset.id }}</span>
+                </td>
+                <td>{{ asset.name }}</td>
+                <td>{{ asset.owner }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

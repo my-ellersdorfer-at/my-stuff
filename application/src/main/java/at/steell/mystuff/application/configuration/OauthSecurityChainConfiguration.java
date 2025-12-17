@@ -5,11 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.csrf.CookieCsrfTokenRepository.withHttpOnlyFalse;
 
 public class OauthSecurityChainConfiguration {
 
@@ -32,6 +34,7 @@ public class OauthSecurityChainConfiguration {
 
         static {
             ROUTES.add("me");
+            ROUTES.add("assets");
         }
 
         public static Set<String> getPathComponents(final HttpServletRequest request) {
@@ -51,7 +54,10 @@ public class OauthSecurityChainConfiguration {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(final HttpSecurity http) {
+    SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+        CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
+        csrfRequestHandler.setCsrfRequestAttributeName(null);
+
         return http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(new CustomerRequestMatcher()).authenticated()
@@ -60,6 +66,9 @@ public class OauthSecurityChainConfiguration {
                 .contentSecurityPolicy(cspConfig -> cspConfig
                     .policyDirectives(contentSecurityPolicyDirective())
                     .reportOnly()))
+            .csrf(csrf -> csrf
+                .csrfTokenRequestHandler(csrfRequestHandler)
+                .csrfTokenRepository(withHttpOnlyFalse()))
             .oauth2Login(withDefaults())
             .build();
     }

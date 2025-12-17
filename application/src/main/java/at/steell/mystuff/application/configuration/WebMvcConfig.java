@@ -8,7 +8,7 @@ import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    private static final String ALL_PATHS = "/**";
+    static final String ALL_PATHS = "/**";
     private static final String STATIC_RESOURCES_LOCATION = "classpath:/static/";
 
     @Override

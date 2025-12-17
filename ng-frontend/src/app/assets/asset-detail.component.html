@@ -1,0 +1,58 @@
+<section class="panel">
+  <header class="panel__header">
+    <div>
+      <p class="eyebrow">Lookup</p>
+      <h2>Find an asset</h2>
+      <p class="muted">
+        Enter an asset id to fetch the latest details directly from the backend.
+      </p>
+    </div>
+  </header>
+
+  <form class="form" (ngSubmit)="lookup()" [formGroup]="form">
+    <label for="assetId">Asset id</label>
+    <div class="form__controls">
+      <input
+        id="assetId"
+        name="assetId"
+        type="text"
+        placeholder="e.g. 1234-5678"
+        formControlName="assetId"
+        required
+      />
+      <button
+        type="submit"
+        [disabled]="loading() || form.invalid || !isLoggedIn()"
+      >
+        {{ loading() ? "Loading…" : "Get asset" }}
+      </button>
+    </div>
+  </form>
+
+  @if (asset()) {
+    <div class="card" data-testid="asset-detail">
+      <p class="muted">Asset</p>
+      <h3>{{ asset()?.name ?? "Unknown asset" }}</h3>
+      <dl>
+        <div>
+          <dt>Id</dt>
+          <dd>{{ asset()?.id }}</dd>
+        </div>
+        <div>
+          <dt>Owner</dt>
+          <dd>{{ asset()?.owner }}</dd>
+        </div>
+      </dl>
+    </div>
+  }
+
+  @if (error()) {
+    <p class="error" data-testid="asset-error">{{ error() }}</p>
+  }
+
+  @if (!error() && !asset()) {
+    <p class="muted" data-testid="asset-auth-hint">
+      You must be signed in to look up assets.
+    </p>
+  }
+</section>

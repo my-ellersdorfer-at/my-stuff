@@ -1,0 +1,19 @@
+@import "./shared-styles.css";
+
+.callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f7f7fb;
+  border: 1px dashed #c9c9dc;
+  border-radius: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.mono {
+  font-family:
+    "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+}
