@@ -4,14 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-import static org.springframework.security.web.csrf.CookieCsrfTokenRepository.withHttpOnlyFalse;
 
 public class OauthSecurityChainConfiguration {
 
@@ -54,7 +54,18 @@ public class OauthSecurityChainConfiguration {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+    @SuppressWarnings({"java:S2254", "java:S3330"})
+        // CSRF token must be readable by the
+        // SPA to include in X-XSRF-TOKEN header.
+    CookieCsrfTokenRepository angularCsrfTokenRepository() {
+        CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        repository.setCookiePath("/");
+        repository.setCookieName("XSRF-TOKEN");
+        return repository;
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(final HttpSecurity http) {
         CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
         csrfRequestHandler.setCsrfRequestAttributeName(null);
 
@@ -68,7 +79,7 @@ public class OauthSecurityChainConfiguration {
                     .reportOnly()))
             .csrf(csrf -> csrf
                 .csrfTokenRequestHandler(csrfRequestHandler)
-                .csrfTokenRepository(withHttpOnlyFalse()))
+                .csrfTokenRepository(angularCsrfTokenRepository()))
             .oauth2Login(withDefaults())
             .build();
     }
