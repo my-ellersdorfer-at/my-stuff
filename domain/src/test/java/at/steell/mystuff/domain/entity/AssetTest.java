@@ -17,14 +17,14 @@ class AssetTest {
         String owner = UUID.randomUUID().toString();
         Asset asset = createDefaultAsset(owner);
         assertNotNull(asset);
-        assertNotNull(asset.getId());
+        assertNotNull(asset.id());
     }
 
     @Test
     void createAsset_hasOwner() {
         String owner = UUID.randomUUID().toString();
         Asset asset = createDefaultAsset(owner);
-        assertEquals(owner, asset.getOwner());
+        assertEquals(owner, asset.owner());
     }
 
     @Test
@@ -33,6 +33,6 @@ class AssetTest {
         Asset asset = Asset.createAsset(UUID.randomUUID().toString())
             .nameAsset(newName);
         assertNotNull(asset);
-        assertEquals(newName, asset.getName());
+        assertEquals(newName, asset.name());
     }
 }

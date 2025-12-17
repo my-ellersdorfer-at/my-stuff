@@ -1,5 +1,6 @@
 package at.steell.mystuff.application.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,5 +18,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
             .resourceChain(true)
             .addResolver(new VersionResourceResolver()
                 .addContentVersionStrategy(ALL_PATHS));
+    }
+
+    @Bean
+    RestExceptionAdvice restExceptionAdvice() {
+        return new RestExceptionAdvice();
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MyStuffApplication.class)
-class MyStuffApplicationTest extends OauthTestSupport {
+class MyStuffApplicationTest implements OauthTestSupport {
     @Autowired
     private WebApplicationContext webApplicationContext;
 

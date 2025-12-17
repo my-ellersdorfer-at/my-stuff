@@ -2,6 +2,8 @@ package at.steell.mystuff.acceptance.dsl;
 
 import java.util.function.Supplier;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public interface MyStuffAcceptanceDsl {
 
     void authenticateAsUser(String username);
@@ -10,7 +12,7 @@ public interface MyStuffAcceptanceDsl {
 
     void assertThatUserIsAuthenticated(String username);
 
-    record AssetOptions(String assetName, String authenticatedUser) {
+    record AssetOptions(String authenticatedUser) {
     }
 
     String createAsset(AssetOptions assetOptions);
@@ -19,9 +21,13 @@ public interface MyStuffAcceptanceDsl {
 
     void assertAssetNotReadable(String assetId);
 
-    void assertExceptional(Supplier<?> action);
+    default void assertExceptional(Supplier<?> action) {
+        assertThrows(Exception.class, action::get);
+    }
 
     Void listUserAssets(String authenticatedUser);
 
-    void assertListOfAssetsSize(int elementCount);
+    void assertListOfAssetsIsEmpty();
+
+    void assertListOfAssetsContains(String assetId);
 }

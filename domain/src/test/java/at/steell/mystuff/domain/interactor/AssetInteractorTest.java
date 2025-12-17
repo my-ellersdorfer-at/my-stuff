@@ -5,14 +5,18 @@ import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetInteractorFactory;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetNotFound;
+import at.steell.mystuff.domain.interactor.AssetInteractor.NoOwner;
 import at.steell.mystuff.domain.store.InMemoryAssetStore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,11 +27,41 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AssetInteractorTest {
     AssetInteractor interactor = new AssetInteractorFactory()
         .withAssetStore(new InMemoryAssetStore())
+        .withAllKindsOfAnonymous(allKindsOfAnonymous())
         .create();
 
     @Test
     void instantiate() {
         assertNotNull(interactor);
+    }
+
+    @Test
+    void withoutAssetStore() {
+        assertThrows(NullPointerException.class, () -> new AssetInteractorFactory()
+            .create());
+    }
+
+    private AssetInteractor assetInteractorWithoutAllKindsOfAnonymous() {
+        return new AssetInteractorFactory()
+            .withAssetStore(new InMemoryAssetStore())
+            .create();
+    }
+
+    @Test
+    void withoutAllKindsOfAnonymous() {
+        assertDoesNotThrow(this::assetInteractorWithoutAllKindsOfAnonymous);
+    }
+
+    private AssetInteractor assetInteractorWithAllKindsOfAnonymousNull() {
+        return new AssetInteractorFactory()
+            .withAssetStore(new InMemoryAssetStore())
+            .withAllKindsOfAnonymous(null)
+            .create();
+    }
+
+    @Test
+    void withAllKindsOfAnonymous_null() {
+        assertDoesNotThrow(this::assetInteractorWithAllKindsOfAnonymousNull);
     }
 
     @Test
@@ -42,7 +76,7 @@ class AssetInteractorTest {
         String assetId = interactor.createAsset(owner);
         Asset asset = interactor.find(assetId, owner);
         assertNotNull(asset);
-        assertEquals(assetId, asset.getId());
+        assertEquals(assetId, asset.id());
     }
 
     @Test
@@ -81,9 +115,14 @@ class AssetInteractorTest {
         assertNull(((NotReadable) expected).getAssetId());
     }
 
+
+    private static Set<String> allKindsOfAnonymous() {
+        return Set.of("", " ", "   ", "anonymous", "guest", "null");
+    }
+
     @ParameterizedTest
-    @ValueSource(strings = {"", " ", "   "})
-    void findAsset_ownerBlank_assetId_notReadable(final String owner) {
+    @MethodSource("allKindsOfAnonymous")
+    void findAsset_anonymous_assetId_notReadable(final String owner) {
         Exception expected = findExceptional(null, owner);
         assertInstanceOf(NotReadable.class, expected);
         assertNull(((NotReadable) expected).getAssetId());
@@ -105,15 +144,55 @@ class AssetInteractorTest {
         assertEquals(assetId, ((NotReadable) expected).getAssetId());
     }
 
-    @Test
-    void listAssets_notAuthenticated_notReadable() {
-        Exception expected = null;
+    private Exception listAssets_notAuthenticated(
+        final AssetInteractor assetInteractor, final String userName) {
         try {
-            interactor.listAssets(null);
+            assetInteractor.listAssets(userName);
         } catch (final Exception e) {
-            expected = e;
+            return e;
         }
-        assertInstanceOf(NotAvailable.class, expected);
+        return null;
+    }
+
+    private Exception listAssets_notAuthenticated(final String userName) {
+        return listAssets_notAuthenticated(interactor, userName);
+    }
+
+    @Test
+    void listAssets_nullUser_notAvailable() {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(null));
+    }
+
+    @Test
+    void listAssets_allKindsOfAnonymous_null_nullUser_notAvailable() {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(
+            assetInteractorWithAllKindsOfAnonymousNull(), null));
+    }
+
+    @Test
+    void listAssets_withoutAllKindsOfAnonymous_nullUser_notAvailable() {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(
+            assetInteractorWithoutAllKindsOfAnonymous(), null));
+    }
+
+    @ParameterizedTest
+    @MethodSource("allKindsOfAnonymous")
+    void listAssets_allKindsOfAnonymous_notAvailable(final String userName) {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(userName));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    void listAssets_allKindsOfAnonymous_null_notAvailable(final String userName) {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(
+            assetInteractorWithAllKindsOfAnonymousNull(), userName));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "   "})
+    void listAssets_withoutAllKindsOfAnonymous_notAvailable(final String userName) {
+        assertInstanceOf(NotAvailable.class, listAssets_notAuthenticated(
+            assetInteractorWithoutAllKindsOfAnonymous(), userName));
     }
 
     @Test
@@ -127,6 +206,11 @@ class AssetInteractorTest {
         String assetId = interactor.createAsset(owner);
         Collection<Asset> assets = interactor.listAssets(owner);
         assertEquals(1, assets.size());
-        assertEquals(assetId, assets.iterator().next().getId());
+        assertEquals(assetId, assets.iterator().next().id());
+    }
+
+    @Test
+    void createAsset_null() {
+        assertThrows(NoOwner.class, () -> interactor.createAsset(null));
     }
 }

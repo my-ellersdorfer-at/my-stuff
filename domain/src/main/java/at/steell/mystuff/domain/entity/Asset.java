@@ -2,30 +2,13 @@ package at.steell.mystuff.domain.entity;
 
 import java.util.UUID;
 
-public final class Asset {
-    private final String id;
-    private final String name;
-    private final String owner;
+public record Asset(String id, String name, String owner) {
 
     private Asset(final Builder builder) {
-        id = builder.id;
-        name = builder.name;
-        owner = builder.owner;
+        this(builder.id, builder.name, builder.owner);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    private static class Builder {
+    private static final class Builder {
         private String id;
         private String name;
         private String owner;

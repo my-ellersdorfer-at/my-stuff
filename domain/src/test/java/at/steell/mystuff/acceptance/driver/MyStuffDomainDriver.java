@@ -6,23 +6,20 @@ import at.steell.mystuff.domain.interactor.AssetInteractor;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetInteractorFactory;
 import at.steell.mystuff.domain.store.InMemoryAssetStore;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DomainDriver implements MyStuffAcceptanceDriver {
-    private static final Logger LOGGER = Logger.getLogger(DomainDriver.class.getName());
+public class MyStuffDomainDriver implements MyStuffAcceptanceDriver {
+    private static final Logger LOGGER = Logger.getLogger(MyStuffDomainDriver.class.getName());
     private final AssetInteractor assetInteractor = new AssetInteractorFactory()
         .withAssetStore(new InMemoryAssetStore())
         .create();
 
     private String currentUsername = null;
-    private final ThreadLocal<Collection<Asset>> currentAssets = ThreadLocal.withInitial(Set::of);
 
     @Override
     public void authenticateAsUser(final String username) {
@@ -61,7 +58,7 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
     public void assertThatAssetExists(final String assetId) {
         Asset asset = assetInteractor.find(assetId, currentUsername);
         assertNotNull(asset);
-        assertEquals(assetId, asset.getId());
+        assertEquals(assetId, asset.id());
     }
 
     @Override
@@ -70,18 +67,16 @@ public class DomainDriver implements MyStuffAcceptanceDriver {
     }
 
     @Override
-    public void assertExceptional(final Supplier<?> action) {
-        assertThrows(Exception.class, action::get);
-    }
-
-    @Override
     public Void listUserAssets(final String authenticatedUser) {
-        currentAssets.set(assetInteractor.listAssets(authenticatedUser));
+        CURRENT_ASSETS.set(assetInteractor.listAssets(authenticatedUser));
         return null;
     }
 
     @Override
-    public void assertListOfAssetsSize(final int elementCount) {
-        assertEquals(elementCount, currentAssets.get().size());
+    public void assertListOfAssetsContains(final String assetId) {
+        assertTrue(CURRENT_ASSETS.get()
+            .stream()
+            .map(object -> (Asset) object)
+            .anyMatch(asset -> asset.id().equals(assetId)));
     }
 }

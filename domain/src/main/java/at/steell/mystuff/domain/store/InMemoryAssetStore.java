@@ -17,14 +17,14 @@ public final class InMemoryAssetStore implements AssetStore {
 
     @Override
     public String save(final Asset asset) {
-        assets.put(asset.getId(), asset);
-        return asset.getId();
+        assets.put(asset.id(), asset);
+        return asset.id();
     }
 
     @Override
     public Set<Asset> getByOwner(final String owner) {
         return assets.values().stream()
-            .filter(asset -> owner.equals(asset.getOwner()))
+            .filter(asset -> owner.equals(asset.owner()))
             .collect(Collectors.toSet());
     }
 }

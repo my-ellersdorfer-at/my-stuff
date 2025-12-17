@@ -7,11 +7,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-public abstract class OauthTestSupport {
-    private static final String KEYCLOAK_REALM_CONFIGURATION = "keycloak/my-stuff.realm.json";
+public interface OauthTestSupport {
+    String KEYCLOAK_REALM_CONFIGURATION = "keycloak/my-stuff.realm.json";
 
     @Container
-    private static final KeycloakContainer KEYCLOAK = new KeycloakContainer()
+    KeycloakContainer KEYCLOAK = new KeycloakContainer()
         .withRealmImportFile(KEYCLOAK_REALM_CONFIGURATION);
 
     @DynamicPropertySource

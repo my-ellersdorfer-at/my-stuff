@@ -13,9 +13,8 @@ public abstract class AbstractAssetAcceptanceTest {
 
     @Test
     void createAssetWithoutAuthentication() {
-        String assetName = "Test Asset";
         driver.assertExceptional(() -> driver.createAsset(
-            new AssetOptions(assetName, null)));
+            new AssetOptions(null)));
     }
 
     @Test
@@ -25,19 +24,19 @@ public abstract class AbstractAssetAcceptanceTest {
         driver.assertThatUserIsAuthenticated(userName);
     }
 
-    private String createAssetWithUser(final String userName, final String assetName) {
+    private String createAssetWithUser(final String userName) {
         driver.authenticateAsUser(userName);
-        return driver.createAsset(new AssetOptions(assetName, userName));
+        return driver.createAsset(new AssetOptions(userName));
     }
 
     @Test
     void createAsset() {
-        driver.assertThatAssetExists(createAssetWithUser("Test User", "Test Asset"));
+        driver.assertThatAssetExists(createAssetWithUser("Test User"));
     }
 
     @Test
     void unauthenticatedCannotRead() {
-        String assetId = createAssetWithUser("User A", "Test Asset");
+        String assetId = createAssetWithUser("User A");
         driver.assertThatAssetExists(assetId);
         driver.unauthenticateUser();
         driver.assertAssetNotReadable(assetId);
@@ -45,7 +44,7 @@ public abstract class AbstractAssetAcceptanceTest {
 
     @Test
     void otherCannotRead() {
-        String assetId = createAssetWithUser("User A", "Test Asset");
+        String assetId = createAssetWithUser("User A");
         driver.assertThatAssetExists(assetId);
         driver.authenticateAsUser("User B");
         driver.assertAssetNotReadable(assetId);
@@ -54,27 +53,27 @@ public abstract class AbstractAssetAcceptanceTest {
     @Test
     void listAssetsWithoutAuthentication_exceptional() {
         driver.authenticateAsUser("User A");
-        driver.createAsset(new AssetOptions("Test Asset", "User A"));
+        driver.createAsset(new AssetOptions("User A"));
         driver.unauthenticateUser();
         driver.assertExceptional(() -> driver.listUserAssets(null));
     }
 
-
     @Test
     void listAssetsDifferentAuthentication_emptyResults() {
         driver.authenticateAsUser("User A");
-        driver.createAsset(new AssetOptions("Test Asset", "User A"));
+        driver.createAsset(new AssetOptions("User A"));
         driver.unauthenticateUser();
+        driver.authenticateAsUser("User B");
         driver.listUserAssets("User B");
-        driver.assertListOfAssetsSize(0);
+        driver.assertListOfAssetsIsEmpty();
     }
 
     @Test
     void listAssets_containsCreated() {
         String user = "User A";
         driver.authenticateAsUser(user);
-        driver.createAsset(new AssetOptions("Test Asset", user));
+        String assetId = driver.createAsset(new AssetOptions(user));
         driver.listUserAssets(user);
-        driver.assertListOfAssetsSize(1);
+        driver.assertListOfAssetsContains(assetId);
     }
 }
