@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestExceptionAdvice {
 
     @ExceptionHandler(AssetNotFound.class)
-    public <T extends AssetNotFound> ResponseEntity<?> handle(final T ex) {
+    public <T extends AssetNotFound> ResponseEntity<String> handle(final T ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(NotAvailable.class)
-    public <T extends NotAvailable> ResponseEntity<?> handle(final T ex) {
+    public <T extends NotAvailable> ResponseEntity<String> handle(final T ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
     @ExceptionHandler(NotReadable.class)
-    public <T extends NotReadable> ResponseEntity<?> handle(final T ex) {
+    public <T extends NotReadable> ResponseEntity<String> handle(final T ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
     @ExceptionHandler(NoOwner.class)
-    public <T extends NoOwner> ResponseEntity<?> handle(final T ex) {
+    public <T extends NoOwner> ResponseEntity<String> handle(final T ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 }

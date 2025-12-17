@@ -37,8 +37,13 @@ class AssetInteractorTest {
 
     @Test
     void withoutAssetStore() {
-        assertThrows(NullPointerException.class, () -> new AssetInteractorFactory()
-            .create());
+        Exception exception = null;
+        try {
+            new AssetInteractorFactory().create();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertInstanceOf(NullPointerException.class, exception);
     }
 
     private AssetInteractor assetInteractorWithoutAllKindsOfAnonymous() {

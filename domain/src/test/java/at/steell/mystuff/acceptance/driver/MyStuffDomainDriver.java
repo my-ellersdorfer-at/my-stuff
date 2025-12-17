@@ -76,7 +76,7 @@ public class MyStuffDomainDriver implements MyStuffAcceptanceDriver {
     public void assertListOfAssetsContains(final String assetId) {
         assertTrue(CURRENT_ASSETS.get()
             .stream()
-            .map(object -> (Asset) object)
+            .map(Asset.class::cast)
             .anyMatch(asset -> asset.id().equals(assetId)));
     }
 }
