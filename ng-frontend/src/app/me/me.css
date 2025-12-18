@@ -1,0 +1,241 @@
+:host {
+  --me-ink: #0b132b;
+  --me-surface: #0f172a;
+  --me-surface-alt: #111827;
+  --me-accent: #f97316;
+  --me-accent-soft: rgba(249, 115, 22, 0.2);
+  --me-highlight: #22d3ee;
+  display: block;
+}
+
+.me-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.75rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, var(--me-surface), var(--me-surface-alt));
+  color: #f8fafc;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+  animation: rise-in 500ms ease-out;
+}
+
+.me-card::before,
+.me-card::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.me-card::before {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(34, 211, 238, 0.22),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(249, 115, 22, 0.25),
+      transparent 50%
+    );
+}
+
+.me-card::after {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent);
+  transform: rotate(-2deg);
+}
+
+.me-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.me-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 28px;
+  background:
+    linear-gradient(140deg, rgba(34, 211, 238, 0.3), rgba(249, 115, 22, 0.25)),
+    rgba(15, 23, 42, 0.8);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: #fff7ed;
+  border: 1px solid rgba(248, 250, 252, 0.2);
+  box-shadow:
+    0 16px 35px rgba(2, 6, 23, 0.35),
+    inset 0 0 18px rgba(34, 211, 238, 0.25);
+}
+
+.me-avatar__text {
+  text-transform: uppercase;
+}
+
+.me-title {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.me-eyebrow {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: rgba(248, 250, 252, 0.7);
+  margin: 0;
+}
+
+.me-name {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.me-handle {
+  margin: 0;
+  color: rgba(248, 250, 252, 0.7);
+  font-size: 0.95rem;
+}
+
+.me-sigil {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  border: 1px solid rgba(248, 250, 252, 0.2);
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.6);
+  box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.2);
+}
+
+.me-sigil svg {
+  width: 42px;
+  height: 42px;
+  fill: none;
+  stroke: #f8fafc;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+.me-status {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(248, 250, 252, 0.15);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+.me-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #94a3b8;
+  box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.2);
+}
+
+.me-status--active .me-status__dot {
+  background: var(--me-accent);
+  box-shadow: 0 0 0 4px var(--me-accent-soft);
+}
+
+.me-attributes {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+.me-attribute {
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  display: grid;
+  gap: 0.35rem;
+  animation: lift-in 540ms ease-out;
+}
+
+.me-attribute:nth-child(1) {
+  animation-delay: 90ms;
+}
+
+.me-attribute:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+.me-attribute:nth-child(3) {
+  animation-delay: 190ms;
+}
+
+.me-attribute:nth-child(4) {
+  animation-delay: 240ms;
+}
+
+.me-attribute__label {
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.me-attribute__value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff7ed;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lift-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .me-header {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .me-sigil {
+    order: -1;
+    width: 56px;
+    height: 56px;
+  }
+
+  .me-avatar {
+    width: 72px;
+    height: 72px;
+  }
+}

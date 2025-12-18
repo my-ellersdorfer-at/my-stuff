@@ -1,4 +1,59 @@
-<p>
-  {{userSessionService.userSession().firstName}}
-  {{userSessionService.userSession().lastName}}
-</p>
+<section class="me-card">
+  <header class="me-header">
+    <div class="me-avatar" aria-hidden="true">
+      <span class="me-avatar__text">{{ avatarText }}</span>
+    </div>
+    <div class="me-title">
+      <p class="me-eyebrow">Current session</p>
+      <h2 class="me-name">{{ displayName }}</h2>
+      <p class="me-handle">@{{ handle }}</p>
+    </div>
+    <div class="me-sigil" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="presentation">
+        <path
+          d="M32 8c7.2 0 13 5.8 13 13s-5.8 13-13 13-13-5.8-13-13S24.8 8 32 8Z"
+        />
+        <path d="M12 54c4.7-9.2 12.1-14 20-14s15.3 4.8 20 14" />
+        <path d="M20 56h24" />
+      </svg>
+    </div>
+  </header>
+
+  <div
+    class="me-status"
+    [class.me-status--active]="userSessionService.loggedIn()"
+  >
+    <span class="me-status__dot"></span>
+    <span
+      >{{ userSessionService.loggedIn() ? 'Active session' : 'Guest session'
+      }}</span
+    >
+  </div>
+
+  <div class="me-attributes">
+    <div class="me-attribute">
+      <span class="me-attribute__label">Username</span>
+      <span class="me-attribute__value"
+        >{{ valueOrPlaceholder(session.userName) }}</span
+      >
+    </div>
+    <div class="me-attribute">
+      <span class="me-attribute__label">First name</span>
+      <span class="me-attribute__value"
+        >{{ valueOrPlaceholder(session.firstName) }}</span
+      >
+    </div>
+    <div class="me-attribute">
+      <span class="me-attribute__label">Last name</span>
+      <span class="me-attribute__value"
+        >{{ valueOrPlaceholder(session.lastName) }}</span
+      >
+    </div>
+    <div class="me-attribute">
+      <span class="me-attribute__label">Avatar token</span>
+      <span class="me-attribute__value"
+        >{{ valueOrPlaceholder(session.avatar, '--') }}</span
+      >
+    </div>
+  </div>
+</section>

@@ -22,6 +22,7 @@
       />
       <button
         type="submit"
+        class="primary"
         [disabled]="loading() || form.invalid || !isLoggedIn()"
       >
         {{ loading() ? "Loading…" : "Get asset" }}
