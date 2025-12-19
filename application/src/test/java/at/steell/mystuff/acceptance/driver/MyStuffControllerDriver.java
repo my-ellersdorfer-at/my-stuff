@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static at.steell.mystuff.application.user.UserSessionFromSecurityContextHelper.fromSpringSecurityContext;
 import static at.steell.mystuff.application.utils.AssetControllerSupport.createOperation;
@@ -17,7 +17,6 @@ import static at.steell.mystuff.application.utils.AssetControllerSupport.findOpe
 import static at.steell.mystuff.application.utils.AssetControllerSupport.listOperation;
 import static at.steell.mystuff.application.utils.SecurityMockUtils.setupOidcUserSecurityContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,11 +26,6 @@ public class MyStuffControllerDriver implements MyStuffAcceptanceDriver {
 
     public MyStuffControllerDriver(final WebApplicationContext webApplicationContext) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @Override
-    public void assertExceptional(final Supplier<?> action) {
-        assertThrows(AssertionError.class, action::get);
     }
 
     @Override
@@ -49,8 +43,17 @@ public class MyStuffControllerDriver implements MyStuffAcceptanceDriver {
         assertEquals(username, fromSpringSecurityContext().userName());
     }
 
-    @Override
-    public String createAsset(final AssetOptions assetOptions) {
+    private String noUserCreateAsset() {
+        try {
+            mockMvc.perform(createOperation())
+                .andExpect(status().isUnauthorized());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    private String defaultCreateAsset() {
         try {
             MvcResult response = mockMvc.perform(createOperation())
                 .andExpect(status().isOk())
@@ -59,6 +62,13 @@ public class MyStuffControllerDriver implements MyStuffAcceptanceDriver {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String createAsset(final AssetOptions assetOptions) {
+        return assetOptions != null && assetOptions.authenticatedUser() != null
+            ? defaultCreateAsset()
+            : noUserCreateAsset();
     }
 
     @Override
@@ -82,25 +92,32 @@ public class MyStuffControllerDriver implements MyStuffAcceptanceDriver {
     }
 
     @Override
-    public Void listUserAssets(final String authenticatedUser) {
+    public void listUserAssets(final String authenticatedUser) {
         try {
             String response = mockMvc.perform(listOperation())
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
             ListOfAssets listOfAssets = OBJECT_MAPPER.readValue(response, ListOfAssets.class);
-            CURRENT_ASSETS.set(listOfAssets.assets());
+            CURRENT_ASSET_IDS.set(listOfAssets.assets().stream().map(Asset::id)
+                .collect(Collectors.toSet()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    @Override
+    public void noUserAssetsWithoutAuthentication() {
+        try {
+            mockMvc.perform(listOperation())
+                .andExpect(status().isForbidden());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void assertListOfAssetsContains(final String assetId) {
-        assertTrue(CURRENT_ASSETS.get()
-            .stream()
-            .map(Asset.class::cast)
-            .anyMatch(asset -> asset.id().equals(assetId)));
+        assertTrue(CURRENT_ASSET_IDS.get().contains(assetId));
     }
 
 }

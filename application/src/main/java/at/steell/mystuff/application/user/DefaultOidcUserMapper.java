@@ -24,8 +24,8 @@ public final class DefaultOidcUserMapper implements UserDetailsMapper {
         if (defaultOidcUser == null) {
             return UserSession.anonymousUserSession();
         }
-        String userName = defaultOidcUser.getSubject();
-        return new UserSession(userName,
+        return new UserSession(
+            defaultOidcUser.getPreferredUsername(),
             defaultOidcUser.getGivenName(),
             defaultOidcUser.getFamilyName(),
             buildAvatar(defaultOidcUser.getGivenName(), defaultOidcUser.getFamilyName()));

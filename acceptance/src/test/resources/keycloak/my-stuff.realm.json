@@ -623,9 +623,9 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "s3e00DwywrOjCt0LXLlEzyMPecN8GXkp",
       "redirectUris": [
-        "http://localhost:8080/*"
+        "http://*"
       ],
       "webOrigins": [
         "/*"
@@ -2177,5 +2177,47 @@
   },
   "clientPolicies": {
     "policies": []
-  }
+  },
+  "users": [
+    {
+      "username": "user1",
+      "email": "user1@my-stuff.local",
+      "firstName": "u1",
+      "lastName": "my-stuff",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "this-is-a-very-strong-password"
+        }
+      ],
+      "clientRoles": {
+        "account": [
+          "view-profile",
+          "manage-account"
+        ]
+      }
+    },
+    {
+      "username": "user2",
+      "email": "user2@my-stuff.local",
+      "firstName": "u2",
+      "lastName": "my-stuff",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "this-is-a-very-strong-password"
+        }
+      ],
+      "clientRoles": {
+        "account": [
+          "view-profile",
+          "manage-account"
+        ]
+      }
+    }
+  ]
 }

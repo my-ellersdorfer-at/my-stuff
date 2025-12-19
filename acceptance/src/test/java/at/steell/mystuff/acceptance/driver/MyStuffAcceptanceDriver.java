@@ -8,9 +8,17 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public interface MyStuffAcceptanceDriver extends MyStuffAcceptanceDsl {
-    ThreadLocal<Collection<?>> CURRENT_ASSETS = ThreadLocal.withInitial(Set::of);
+    ThreadLocal<Collection<String>> CURRENT_ASSET_IDS = ThreadLocal.withInitial(Set::of);
 
     default void assertListOfAssetsIsEmpty() {
-        assertTrue(CURRENT_ASSETS.get().isEmpty());
+        assertTrue(CURRENT_ASSET_IDS.get().isEmpty());
+    }
+
+    default String userA() {
+        return "User A";
+    }
+
+    default String userB() {
+        return "User B";
     }
 }

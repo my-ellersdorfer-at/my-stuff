@@ -10,12 +10,19 @@ import {
 
 import { routes } from './app.routes';
 import { provideAssetBearerTokenInterceptor } from './services/asset-bearer-token.provider';
+import { BASE_PATH } from '../generated';
+
+export const API_BASE_PATH = '';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideAssetBearerTokenInterceptor(),
+    {
+      provide: BASE_PATH,
+      useValue: API_BASE_PATH,
+    },
     provideHttpClient(withInterceptorsFromDi()),
   ],
 };

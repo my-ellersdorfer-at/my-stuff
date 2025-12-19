@@ -4,9 +4,11 @@ import at.steell.mystuff.domain.entity.Asset;
 import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetInteractorFactory;
+import at.steell.mystuff.domain.interactor.AssetInteractor.NoOwner;
 import at.steell.mystuff.domain.store.InMemoryAssetStore;
 
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,17 +43,20 @@ public class MyStuffDomainDriver implements MyStuffAcceptanceDriver {
         assertEquals(currentUsername, username);
     }
 
-    private void npeIfCurrentUserName_null() {
-        if (currentUsername == null) {
-            throw new NullPointerException();
-        }
+    private String noUserCreateAsset() {
+        assertThrows(NoOwner.class, () -> assetInteractor.createAsset(null));
+        return null;
+    }
+
+    private String defaultCreateAsset() {
+        return assetInteractor.createAsset(currentUsername);
     }
 
     @Override
     public String createAsset(final AssetOptions assetOptions) {
-        currentUsername = assetOptions.authenticatedUser();
-        npeIfCurrentUserName_null();
-        return assetInteractor.createAsset(assetOptions.authenticatedUser());
+        return assetOptions != null && assetOptions.authenticatedUser() != null
+            ? defaultCreateAsset()
+            : noUserCreateAsset();
     }
 
     @Override
@@ -67,16 +72,19 @@ public class MyStuffDomainDriver implements MyStuffAcceptanceDriver {
     }
 
     @Override
-    public Void listUserAssets(final String authenticatedUser) {
-        CURRENT_ASSETS.set(assetInteractor.listAssets(authenticatedUser));
-        return null;
+    public void listUserAssets(final String authenticatedUser) {
+        CURRENT_ASSET_IDS.set(assetInteractor.listAssets(authenticatedUser)
+            .stream().map(Asset::id)
+            .collect(Collectors.toSet()));
+    }
+
+    @Override
+    public void noUserAssetsWithoutAuthentication() {
+        assertThrows(RuntimeException.class, () -> assetInteractor.listAssets(null));
     }
 
     @Override
     public void assertListOfAssetsContains(final String assetId) {
-        assertTrue(CURRENT_ASSETS.get()
-            .stream()
-            .map(Asset.class::cast)
-            .anyMatch(asset -> asset.id().equals(assetId)));
+        assertTrue(CURRENT_ASSET_IDS.get().contains(assetId));
     }
 }

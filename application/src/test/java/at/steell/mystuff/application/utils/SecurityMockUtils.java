@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public final class SecurityMockUtils {
     public static final String FAMILY_NAME = "User";
@@ -34,7 +35,8 @@ public final class SecurityMockUtils {
         OidcIdToken idToken = new OidcIdToken("tokenValue",
             Instant.now(),
             expiration,
-            Map.of("sub", userName,
+            Map.of("sub", UUID.randomUUID().toString(),
+                "preferred_username", userName,
                 "exp", expiration.getEpochSecond(),
                 "given_name", SecurityMockUtils.GIVEN_NAME,
                 "family_name", SecurityMockUtils.FAMILY_NAME));

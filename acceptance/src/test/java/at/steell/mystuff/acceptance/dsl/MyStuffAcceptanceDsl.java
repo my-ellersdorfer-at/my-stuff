@@ -1,9 +1,5 @@
 package at.steell.mystuff.acceptance.dsl;
 
-import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public interface MyStuffAcceptanceDsl {
 
     void authenticateAsUser(String username);
@@ -21,11 +17,9 @@ public interface MyStuffAcceptanceDsl {
 
     void assertAssetNotReadable(String assetId);
 
-    default void assertExceptional(Supplier<?> action) {
-        assertThrows(Exception.class, action::get);
-    }
+    void listUserAssets(String authenticatedUser);
 
-    Void listUserAssets(String authenticatedUser);
+    void noUserAssetsWithoutAuthentication();
 
     void assertListOfAssetsIsEmpty();
 
