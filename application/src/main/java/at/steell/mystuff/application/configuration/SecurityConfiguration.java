@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
+@SuppressWarnings({"checkstyle:FinalClass", "java:S1118"})
 @Configuration
 @EnableWebSecurity
 @Import({
