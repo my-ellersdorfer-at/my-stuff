@@ -24,8 +24,7 @@ public class OauthUiLoginFlow {
             oauthLoginFlow();
         } catch (final Exception e) {
             LOGGER.log(Level.WARNING,
-                "OAuth login might have failed, check if test execution fails during post execution.",
-                e);
+                "OAuth login might have failed, check if test execution fails during post execution.");
         }
     }
 
