@@ -6,6 +6,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @Configuration
 @EnableWebSecurity
-@Import({OauthSecurityChainConfiguration.class})
+@Import({
+    OauthSecurityChainConfiguration.class,
+    JwksConfiguration.class,
+    JwtConfiguration.class})
 public class SecurityConfiguration {
 }

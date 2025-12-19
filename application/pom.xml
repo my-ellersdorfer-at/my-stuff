@@ -178,6 +178,27 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -204,6 +225,8 @@
 
                         <ignoredUnusedDeclaredDependency>org.springdoc:springdoc-openapi-starter-webmvc-ui</ignoredUnusedDeclaredDependency>
                         <ignoredUnusedDeclaredDependency>org.springdoc:springdoc-openapi-starter-common</ignoredUnusedDeclaredDependency>
+
+                        <ignoredUnusedDeclaredDependency>org.springframework.security:spring-security-oauth2-resource-server</ignoredUnusedDeclaredDependency>
                     </ignoredUnusedDeclaredDependencies>
                 </configuration>
             </plugin>
