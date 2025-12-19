@@ -7,25 +7,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  commit-stage:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # needed for correct Sonar analysis
+
       - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
           java-version: '25-ea'
           distribution: 'temurin'
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache local Maven repository
         uses: actions/cache@v4
         with:
@@ -33,7 +34,40 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven
-      - name: Build with Maven
+
+      - name: Commit stage (unit + integration, sonar, no acceptance)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B clean verify jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --file pom.xml -Dsonar.projectKey=my-ellersdorfer-at_my-stuff
+        run: |
+          mvn -B clean verify jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            --file pom.xml \
+            -DexcludedGroups=acceptanceTest \
+            -Dsonar.projectKey=my-ellersdorfer-at_my-stuff
+
+  acceptance-tests:
+    needs: commit-stage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25-ea'
+          distribution: 'temurin'
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
+
+      - name: Acceptance tests only (tagged)
+        run: |
+          mvn -B clean verify \
+            --file pom.xml \
+            -Dgroups=acceptanceTest \
