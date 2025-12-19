@@ -8,7 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @Import({
     OauthSecurityChainConfiguration.class,
+    AssetApiChainConfiguration.class,
     JwksConfiguration.class,
     JwtConfiguration.class})
 public class SecurityConfiguration {
+    static final int ASSET_API_CHAIN_ORDER = 1;
+    static final int OAUTH_SECURITY_CHAIN_ORDER = 2;
 }

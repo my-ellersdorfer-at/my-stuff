@@ -12,7 +12,8 @@ import static at.steell.mystuff.application.user.UserSession.anonymousUserSessio
 public final class UserSessionFromSecurityContextHelper {
     private static final List<UserDetailsMapper> USER_DETAILS_MAPPERS = List.of(new DefaultOidcUserMapper(),
         new PreAuthenticatedAuthenticationTokenMapper(),
-        new UsernamePasswordAuthenticationTokenMapper());
+        new UsernamePasswordAuthenticationTokenMapper(),
+        new JwtAuthenticationTokenMapper());
 
     private UserSessionFromSecurityContextHelper() {
     }

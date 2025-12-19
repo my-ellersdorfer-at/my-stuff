@@ -1,5 +1,6 @@
 package at.steell.mystuff.application.configuration;
 
+import at.steell.mystuff.application.web.AuthenticationController.AnonymousUserTokenRequest;
 import at.steell.mystuff.domain.exception.NotAvailable;
 import at.steell.mystuff.domain.exception.NotReadable;
 import at.steell.mystuff.domain.interactor.AssetInteractor.AssetNotFound;
@@ -31,5 +32,10 @@ public class RestExceptionAdvice {
     @ExceptionHandler(NoOwner.class)
     public <T extends NoOwner> ResponseEntity<String> handle(final T ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AnonymousUserTokenRequest.class)
+    public <T extends AnonymousUserTokenRequest> ResponseEntity<String> handle(final T ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 }

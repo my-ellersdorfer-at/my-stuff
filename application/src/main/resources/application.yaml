@@ -21,3 +21,7 @@ spring:
         provider:
           my-stuff:
             issuer-uri: https://localhost:8443/realms/my-stuff
+
+app:
+  jwt:
+    issuer: http://localhost:8080

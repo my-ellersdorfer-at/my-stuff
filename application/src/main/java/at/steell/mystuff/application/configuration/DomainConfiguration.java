@@ -12,11 +12,13 @@ import static org.springframework.security.config.Elements.ANONYMOUS;
 
 @Configuration
 public class DomainConfiguration {
+    public static final Set<String> ALL_KINDS_OF_ANONYMOUS = Set.of(ANONYMOUS);
+
     @Bean
     public AssetInteractor assetInteractor() {
         return new AssetInteractorFactory()
             .withAssetStore(new InMemoryAssetStore())
-            .withAllKindsOfAnonymous(Set.of(ANONYMOUS))
+            .withAllKindsOfAnonymous(ALL_KINDS_OF_ANONYMOUS)
             .create();
     }
 }

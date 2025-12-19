@@ -1,31 +1,23 @@
 package at.steell.mystuff.application.configuration;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
-@Configuration
+import static at.steell.mystuff.application.configuration.SecurityConfiguration.ASSET_API_CHAIN_ORDER;
+
 public class AssetApiChainConfiguration {
-    private static final class AssetsApiRequestMatcher implements RequestMatcher {
-        @Override
-        public boolean matches(final HttpServletRequest request) {
-            return request.getServletPath().contains("/api/assets");
-        }
-    }
 
     @SuppressWarnings("java:S4502")
     @Bean
-    @Order(1)
-    SecurityFilterChain assetApiChain(final HttpSecurity http) throws Exception {
+    @Order(ASSET_API_CHAIN_ORDER)
+    SecurityFilterChain assetApiChain(final HttpSecurity http) {
         return http
-            .securityMatcher(new AssetsApiRequestMatcher())
+            .securityMatcher(new PathMatchingRequestMatcher("/api/assets"))
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sessionManagementConfigurer ->
                 sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

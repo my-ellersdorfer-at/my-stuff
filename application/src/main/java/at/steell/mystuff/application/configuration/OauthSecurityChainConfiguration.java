@@ -2,15 +2,15 @@ package at.steell.mystuff.application.configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static at.steell.mystuff.application.configuration.SecurityConfiguration.OAUTH_SECURITY_CHAIN_ORDER;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 public class OauthSecurityChainConfiguration {
@@ -54,24 +54,7 @@ public class OauthSecurityChainConfiguration {
     }
 
     @Bean
-    @SuppressWarnings({"java:S2254", "java:S3330"})
-        // CSRF token must be readable by the
-        // SPA to include in X-XSRF-TOKEN header.
-    CookieCsrfTokenRepository angularCsrfTokenRepository() {
-        CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookiePath("/");
-        repository.setCookieName("XSRF-TOKEN");
-        return repository;
-    }
-
-    private CsrfTokenRequestAttributeHandler spaCsrfTokenRequestAttributeHandler() {
-        CsrfTokenRequestAttributeHandler csrfRequestHandler = new CsrfTokenRequestAttributeHandler();
-        csrfRequestHandler.setCsrfRequestAttributeName(null); // NOSONAR: SPA reads token from cookie/header;
-        // avoid request attribute exposure.
-        return csrfRequestHandler;
-    }
-
-    @Bean
+    @Order(OAUTH_SECURITY_CHAIN_ORDER)
     SecurityFilterChain securityFilterChain(final HttpSecurity http) {
         return http
             .authorizeHttpRequests(auth -> auth
@@ -81,9 +64,6 @@ public class OauthSecurityChainConfiguration {
                 .contentSecurityPolicy(cspConfig -> cspConfig
                     .policyDirectives(contentSecurityPolicyDirective())
                     .reportOnly()))
-            .csrf(csrf -> csrf
-                .csrfTokenRequestHandler(spaCsrfTokenRequestAttributeHandler())
-                .csrfTokenRepository(angularCsrfTokenRepository()))
             .oauth2Login(withDefaults())
             .build();
     }
