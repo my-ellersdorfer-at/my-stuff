@@ -6,7 +6,6 @@ import at.steell.mystuff.acceptance.driver.ServerUrl;
 import at.steell.mystuff.application.MyStuffApplication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MyStuffApplication.class)
-public class AssetUiAcceptanceTest extends AbstractAssetAcceptanceTest implements OauthTestSupport {
+class AssetUiAcceptanceTest extends AbstractAssetAcceptanceTest implements OauthTestSupport {
     private final ServletWebServerApplicationContext servletWebServerApplicationContext;
     private final WebApplicationContext webApplicationContext;
 
@@ -57,8 +58,13 @@ public class AssetUiAcceptanceTest extends AbstractAssetAcceptanceTest implement
         getUiDriver().setServerUrl(new ServerUrl(serverPort, contextPath));
     }
 
-    @Disabled("Logout not implemented yet")
+    private void unreachable() {
+        throw new UnsupportedOperationException("This is not reachable in the user interface");
+    }
+
+    @Override
     @Test
     void listAssetsDifferentAuthentication_emptyResults() {
+        assertThrows(UnsupportedOperationException.class, this::unreachable);
     }
 }

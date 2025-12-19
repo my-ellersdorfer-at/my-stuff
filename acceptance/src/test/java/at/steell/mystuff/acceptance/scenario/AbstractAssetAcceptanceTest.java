@@ -4,6 +4,8 @@ import at.steell.mystuff.acceptance.driver.MyStuffAcceptanceDriver;
 import at.steell.mystuff.acceptance.dsl.MyStuffAcceptanceDsl.AssetOptions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 public abstract class AbstractAssetAcceptanceTest {
     private final MyStuffAcceptanceDriver driver;
 
@@ -17,7 +19,7 @@ public abstract class AbstractAssetAcceptanceTest {
 
     @Test
     void createAssetWithoutAuthentication() {
-        driver.createAsset(new AssetOptions(null));
+        assertDoesNotThrow(() -> driver.createAsset(new AssetOptions(null)));
     }
 
     @Test
@@ -57,7 +59,7 @@ public abstract class AbstractAssetAcceptanceTest {
         driver.authenticateAsUser(driver.userA());
         driver.createAsset(new AssetOptions(driver.userA()));
         driver.unauthenticateUser();
-        driver.noUserAssetsWithoutAuthentication();
+        assertDoesNotThrow(driver::noUserAssetsWithoutAuthentication);
     }
 
     @Test

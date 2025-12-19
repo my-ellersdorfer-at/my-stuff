@@ -22,7 +22,7 @@ public class OauthUiLoginFlow {
     public void login() {
         try {
             oauthLoginFlow();
-        } catch (final Exception e) {
+        } catch (Exception _) {
             LOGGER.log(Level.WARNING,
                 "OAuth login might have failed, check if test execution fails during post execution.");
         }
