@@ -36,7 +36,7 @@
         <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
         <org.springdoc.version>3.0.0</org.springdoc.version>
         <playwright.version>1.56.0</playwright.version>
-        <spring-boot.version>4.0.0</spring-boot.version>
+        <spring-boot.version>4.0.1</spring-boot.version>
         <springdoc-openapi-maven-plugin.version>1.5</springdoc-openapi-maven-plugin.version>
         <testcontainers.version>2.0.2</testcontainers.version>
         <testcontainers-junit-jupiter.version>1.21.3</testcontainers-junit-jupiter.version>
