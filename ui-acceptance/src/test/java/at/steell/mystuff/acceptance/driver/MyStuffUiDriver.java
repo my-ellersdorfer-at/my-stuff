@@ -87,10 +87,14 @@ public class MyStuffUiDriver implements MyStuffAcceptanceDriver {
         assertTrue(page.locator("app-me .me-handle").textContent().contains("@" + username));
     }
 
-    private String noUserCreateAsset() {
-        page = context.newPage();
+    private void keycloakLoginPageIsVisible() {
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Username")).isVisible();
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).isVisible();
+    }
+
+    private String noUserCreateAsset() {
+        page = context.newPage();
+        keycloakLoginPageIsVisible();
         return null;
     }
 
@@ -117,14 +121,12 @@ public class MyStuffUiDriver implements MyStuffAcceptanceDriver {
 
     @Override
     public void assertAssetNotReadable(final String assetId) {
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Username")).isVisible();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).isVisible();
+        keycloakLoginPageIsVisible();
     }
 
     @Override
     public void noUserAssetsWithoutAuthentication() {
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Username")).isVisible();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).isVisible();
+        keycloakLoginPageIsVisible();
     }
 
     @Override
