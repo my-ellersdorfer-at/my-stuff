@@ -40,7 +40,7 @@
         <springdoc-openapi-maven-plugin.version>1.5</springdoc-openapi-maven-plugin.version>
         <testcontainers.version>2.0.3</testcontainers.version>
         <testcontainers-junit-jupiter.version>1.21.4</testcontainers-junit-jupiter.version>
-        <testcontainers-keycloak.version>4.0.1</testcontainers-keycloak.version>
+        <testcontainers-keycloak.version>4.1.0</testcontainers-keycloak.version>
 
         <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
     </properties>
