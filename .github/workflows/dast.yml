@@ -36,23 +36,6 @@ jobs:
       - name: Start Keycloak via docker compose
         run: docker compose -f docker-compose.yaml up -d
 
-      - name: Wait for Keycloak to be ready
-        run: |
-          set -e
-          # Adjust if your compose exposes a different port or uses HTTPS
-          KC_URL="http://localhost:8080"
-          echo "Waiting for Keycloak at ${KC_URL} ..."
-          for i in {1..90}; do
-            if curl -fsS "${KC_URL}" >/dev/null; then
-              echo "Keycloak is up."
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "Keycloak did not become ready in time."
-          docker compose -f docker-compose.yaml logs --no-color | tail -n 250 || true
-          exit 1
-
       - name: Start Spring Boot
         run: |
           set -e
@@ -68,22 +51,6 @@ jobs:
               -Djavax.net.ssl.trustStorePassword=${KEYSTORE_PASSWORD} \
             " \
             > app.log 2>&1 &
-
-      - name: Wait for app to be ready
-        run: |
-          set -e
-          echo "Waiting for ${APP_URL} ..."
-          for i in {1..90}; do
-            if curl -fsS "${APP_URL}" >/dev/null; then
-              echo "App is up."
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "App did not become ready in time."
-          echo "---- app.log (tail) ----"
-          tail -n 250 app.log || true
-          exit 1
 
       - name: OWASP ZAP Baseline Scan
         run: |
