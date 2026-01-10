@@ -33,8 +33,8 @@ jobs:
         run: |
           ls -la acceptance/src/test/resources/keycloak/my-stuff.realm.json
 
-      - name: Maven build (skip tests)
-        run: mvn -B -DskipTests package --file pom.xml
+      - name: Maven build
+        run: mvn -B clean verify --file pom.xml -Dgroups=acceptanceTest
 
       - name: Start Spring Boot (background)
         run: |
