@@ -43,6 +43,7 @@ jobs:
           nohup mvn -B -DskipTests \
             -pl "${BOOT_MODULE}" -am \
             spring-boot:run \
+            -Dspring-boot.run.main-class=at.steell.mystuff.application.MyStuffApplication \
             -Dspring-boot.run.jvmArguments="\
               --server.port=8888 \
               -Djavax.net.ssl.keyStore=${KEYSTORE_DIR}/cacerts \
