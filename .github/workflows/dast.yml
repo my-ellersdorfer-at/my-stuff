@@ -11,7 +11,7 @@ jobs:
 
     env:
       BOOT_MODULE: "application"
-      APP_URL: "http://localhost:8080"
+      APP_URL: "http://localhost:8888"
       KEYSTORE_DIR: "${{ github.workspace }}/keystore"
       KEYSTORE_PASSWORD: "changeit"
 
@@ -61,7 +61,7 @@ jobs:
             -pl "${BOOT_MODULE}" -am \
             spring-boot:run \
             -Dspring-boot.run.jvmArguments="\
-              --server.port=8080 \
+              --server.port=8888 \
               -Djavax.net.ssl.keyStore=${KEYSTORE_DIR}/cacerts \
               -Djavax.net.ssl.keyStorePassword=${KEYSTORE_PASSWORD} \
               -Djavax.net.ssl.trustStore=${KEYSTORE_DIR}/cacerts \
