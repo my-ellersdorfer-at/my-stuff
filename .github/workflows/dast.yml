@@ -26,17 +26,34 @@ jobs:
           java-version: "25"
           cache: "maven"
 
-      - name: Start Keycloak via docker compose
-        run: docker compose -f docker-compose.yaml up -d
-
       - name: (Optional) Show realm file exists
         run: |
           ls -la acceptance/src/test/resources/keycloak/my-stuff.realm.json
 
-      - name: Maven build
+      - name: Maven build + acceptance tests
         run: mvn -B clean verify --file pom.xml -Dgroups=acceptanceTest
 
-      - name: Start Spring Boot (background)
+      - name: Start Keycloak via docker compose
+        run: docker compose -f docker-compose.yaml up -d
+
+      - name: Wait for Keycloak to be ready
+        run: |
+          set -e
+          # Adjust if your compose exposes a different port or uses HTTPS
+          KC_URL="http://localhost:8081"
+          echo "Waiting for Keycloak at ${KC_URL} ..."
+          for i in {1..90}; do
+            if curl -fsS "${KC_URL}" >/dev/null; then
+              echo "Keycloak is up."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Keycloak did not become ready in time."
+          docker compose -f docker-compose.yaml logs --no-color | tail -n 250 || true
+          exit 1
+
+      - name: Start Spring Boot
         run: |
           set -e
 
