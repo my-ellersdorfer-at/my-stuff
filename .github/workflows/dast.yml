@@ -40,7 +40,7 @@ jobs:
         run: |
           set -e
           # Adjust if your compose exposes a different port or uses HTTPS
-          KC_URL="http://localhost:8443"
+          KC_URL="http://localhost:8080"
           echo "Waiting for Keycloak at ${KC_URL} ..."
           for i in {1..90}; do
             if curl -fsS "${KC_URL}" >/dev/null; then
