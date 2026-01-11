@@ -36,6 +36,21 @@ jobs:
       - name: Start Keycloak via docker compose
         run: docker compose -f docker-compose.yaml up -d
 
+      - name: Wait for Keycloak realm (OIDC discovery)
+        run: |
+          set -e
+          URL="https://localhost:8443/realms/my-stuff/.well-known/openid-configuration"
+          for i in {1..120}; do
+            if curl -kfsS "$URL" >/dev/null; then
+              echo "Realm is imported and OIDC discovery is reachable."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Realm import not ready in time."
+          docker compose -f docker-compose.yaml logs --no-color keycloak | tail -n 300 || true
+          exit 1
+
       - name: Package Spring Boot app (reactor build)
         run: mvn -B -DskipTests -pl "${BOOT_MODULE}" -am package
 
