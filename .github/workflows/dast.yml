@@ -96,7 +96,7 @@ jobs:
           docker run --rm --network host \
             --user "${RUN_UID}:${RUN_GID}" \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
-            -v "${PWD}/zap-reports:/home/zap:rw" \
+            -v "${PWD}/zap-home:/home/zap:rw" \
             zaproxy/zap-stable \
             zap-baseline.py \
               -t "${APP_URL}" \
@@ -117,4 +117,12 @@ jobs:
         with:
           name: app-log
           path: app.log
+          if-no-files-found: ignore
+
+      - name: Upload ZAP home (debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-home
+          path: zap-home
           if-no-files-found: ignore
