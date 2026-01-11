@@ -69,6 +69,22 @@ jobs:
             --server.port=8888 \
             > app.log 2>&1 &
 
+      - name: Wait for app to be ready
+        run: |
+          set -e
+          echo "Waiting for ${APP_URL} ..."
+          for i in {1..120}; do
+            if curl -fsS "${APP_URL}" >/dev/null; then
+              echo "App is up."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "App did not become ready in time."
+          echo "---- app.log (tail) ----"
+          tail -n 250 app.log || true
+          exit 1
+
       - name: OWASP ZAP Baseline Scan
         run: |
           mkdir -p zap-reports
@@ -80,6 +96,7 @@ jobs:
           docker run --rm --network host \
             --user "${RUN_UID}:${RUN_GID}" \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
+            -v "${PWD}/zap-reports:/home/zap:rw" \
             zaproxy/zap-stable \
             zap-baseline.py \
               -t "${APP_URL}" \
