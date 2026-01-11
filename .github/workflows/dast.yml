@@ -39,6 +39,20 @@ jobs:
       - name: Package Spring Boot app (reactor build)
         run: mvn -B -DskipTests -pl "${BOOT_MODULE}" -am package
 
+      - name: Wait for Keycloak OIDC discovery
+        run: |
+          set -e
+          for i in {1..90}; do
+            if curl -kfsS https://localhost:8443/realms/my-stuff/.well-known/openid-configuration >/dev/null; then
+              echo "OIDC discovery is reachable."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "OIDC discovery not reachable."
+          docker compose -f docker-compose.yaml logs --no-color | tail -n 300 || true
+          exit 1
+    
       - name: Start Spring Boot (background, java -jar)
         run: |
           set -e
@@ -51,7 +65,7 @@ jobs:
             -Djavax.net.ssl.trustStore=${KEYSTORE_DIR}/cacerts \
             -Djavax.net.ssl.trustStorePassword=${KEYSTORE_PASSWORD} \
             -jar "${JAR_PATH}" \
-            --server.port=8080 \
+            --server.port=8888 \
             > app.log 2>&1 &
 
       - name: OWASP ZAP Baseline Scan
