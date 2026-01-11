@@ -73,12 +73,12 @@ jobs:
         run: |
           mkdir -p zap-reports
 
-          UID=$(id -u)
-          GID=$(id -g)
+          RUN_UID=$(id -u)
+          RUN_GID=$(id -g)
 
           docker pull zaproxy/zap-stable
           docker run --rm --network host \
-            --user "${UID}:${GID}" \
+            --user "${RUN_UID}:${RUN_GID}" \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
             zaproxy/zap-stable \
             zap-baseline.py \
