@@ -88,24 +88,21 @@ jobs:
       - name: OWASP ZAP Baseline Scan
         run: |
           mkdir -p zap-reports
+      
+          ZAP_UID="$(docker run --rm zaproxy/zap-stable id -u)"
+          ZAP_GID="$(docker run --rm zaproxy/zap-stable id -g)"
+      
+          sudo chown -R "${ZAP_UID}:${ZAP_GID}" zap-reports
 
-          RUN_UID=$(id -u)
-          RUN_GID=$(id -g)
-
-          docker pull zaproxy/zap-stable
           docker run --rm --network host \
-            --user "${RUN_UID}:${RUN_GID}" \
-            --tmpfs /zap/home:rw,mode=1777,size=256m \
-            -e HOME=/zap/home \
-            -e ZAP_HOME=/zap/home \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
             zaproxy/zap-stable \
             zap-baseline.py \
-              -t "${APP_URL}" \
-              -r zap-baseline-report.html \
-              -J zap-baseline-report.json \
-              -w zap-baseline-warn.md \
-              || true
+            -t "${APP_URL}" \
+            -r zap-baseline-report.html \
+            -J zap-baseline-report.json \
+            -w zap-baseline-warn.md \
+            || true
 
       - name: Upload ZAP reports
         uses: actions/upload-artifact@v4
@@ -119,12 +116,4 @@ jobs:
         with:
           name: app-log
           path: app.log
-          if-no-files-found: ignore
-
-      - name: Upload ZAP home (debug)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-home
-          path: zap-home
           if-no-files-found: ignore
