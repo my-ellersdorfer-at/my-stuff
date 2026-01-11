@@ -305,7 +305,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <executable>true</executable>
+                    <mainClass>at.steell.mystuff.application.MyStuffApplication</mainClass>
                     <jvmArguments>
                         -Djavax.net.ssl.keyStore=${project.basedir}/../keystore/cacerts
                         -Djavax.net.ssl.keyStorePassword=changeit
