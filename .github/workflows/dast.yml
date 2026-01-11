@@ -95,8 +95,10 @@ jobs:
           docker pull zaproxy/zap-stable
           docker run --rm --network host \
             --user "${RUN_UID}:${RUN_GID}" \
+            -e HOME=/zap/home \
+            -e ZAP_HOME=/zap/home \
+            -v "${PWD}/zap-home:/zap/home:rw" \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
-            -v "${PWD}/zap-home:/home/zap:rw" \
             zaproxy/zap-stable \
             zap-baseline.py \
               -t "${APP_URL}" \
