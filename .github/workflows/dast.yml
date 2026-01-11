@@ -72,6 +72,7 @@ jobs:
       - name: OWASP ZAP Baseline Scan
         run: |
           mkdir -p zap-reports
+          chmod -R 777 zap-reports
           docker pull zaproxy/zap-stable
           docker run --rm --network host \
             -v "${PWD}/zap-reports:/zap/wrk:rw" \
