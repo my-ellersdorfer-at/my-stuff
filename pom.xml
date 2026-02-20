@@ -32,7 +32,7 @@
         <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
-        <nimbus-jose-jwt.version>10.7</nimbus-jose-jwt.version>
+        <nimbus-jose-jwt.version>10.8</nimbus-jose-jwt.version>
         <openapi-generator-maven-plugin.version>7.20.0</openapi-generator-maven-plugin.version>
         <org.springdoc.version>3.0.1</org.springdoc.version>
         <playwright.version>1.58.0</playwright.version>
