@@ -46,8 +46,8 @@ importers:
         specifier: ^21.2.1
         version: 21.2.1(@angular/compiler-cli@21.2.1(@angular/compiler@21.2.1)(typescript@5.9.3))(@angular/compiler@21.2.1)(@angular/core@21.2.1(@angular/compiler@21.2.1)(rxjs@7.8.2)(zone.js@0.16.0))(@angular/platform-browser@21.2.1(@angular/animations@21.2.1(@angular/core@21.2.1(@angular/compiler@21.2.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@angular/common@21.2.1(@angular/core@21.2.1(@angular/compiler@21.2.1)(rxjs@7.8.2)(zone.js@0.16.0))(rxjs@7.8.2))(@angular/core@21.2.1(@angular/compiler@21.2.1)(rxjs@7.8.2)(zone.js@0.16.0)))(@types/node@25.3.5)(chokidar@5.0.0)(jiti@2.6.1)(karma@6.4.4)(typescript@5.9.3)
       '@angular-eslint/builder':
-        specifier: 21.2.0
-        version: 21.2.0(@angular/cli@21.2.1(@types/node@25.3.5)(chokidar@5.0.0))(chokidar@5.0.0)(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 21.3.0
+        version: 21.3.0(@angular/cli@21.2.1(@types/node@25.3.5)(chokidar@5.0.0))(chokidar@5.0.0)(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
       '@angular/cli':
         specifier: ^21.2.1
         version: 21.2.1(@types/node@25.3.5)(chokidar@5.0.0)
@@ -233,6 +233,13 @@ packages:
     peerDependencies:
       '@angular/cli': '>= 21.0.0 < 22.0.0'
       eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+
+  '@angular-eslint/builder@21.3.0':
+    resolution: {integrity: sha512-26QUUouei52biUFAlJSrWNAU9tuF2miKwd8uHdxWwCF31xz+OxC5+NfudWvt1AFaYow7gWueX1QX3rNNtSPDrg==}
+    peerDependencies:
+      '@angular/cli': '>= 21.0.0 < 22.0.0'
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '*'
 
   '@angular-eslint/bundled-angular-compiler@21.2.0':
@@ -5110,6 +5117,16 @@ snapshots:
       - chokidar
 
   '@angular-eslint/builder@21.2.0(@angular/cli@21.2.1(@types/node@25.3.5)(chokidar@5.0.0))(chokidar@5.0.0)(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)':
+    dependencies:
+      '@angular-devkit/architect': 0.2102.1(chokidar@5.0.0)
+      '@angular-devkit/core': 21.2.1(chokidar@5.0.0)
+      '@angular/cli': 21.2.1(@types/node@25.3.5)(chokidar@5.0.0)
+      eslint: 9.39.4(jiti@2.6.1)
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - chokidar
+
+  '@angular-eslint/builder@21.3.0(@angular/cli@21.2.1(@types/node@25.3.5)(chokidar@5.0.0))(chokidar@5.0.0)(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@angular-devkit/architect': 0.2102.1(chokidar@5.0.0)
       '@angular-devkit/core': 21.2.1(chokidar@5.0.0)
