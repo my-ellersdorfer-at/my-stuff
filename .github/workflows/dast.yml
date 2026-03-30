@@ -31,7 +31,7 @@ jobs:
           ls -la acceptance/src/test/resources/keycloak/my-stuff.realm.json
 
       - name: Maven build + acceptance tests
-        run: mvn -B clean verify --file pom.xml -Dgroups=acceptanceTest -pl !ui-acceptance
+        run: mvn -B clean verify --file pom.xml -Dgroups=acceptanceTest
 
       - name: Start Keycloak via docker compose
         run: docker compose -f docker-compose.yaml up -d
@@ -84,9 +84,6 @@ jobs:
           echo "---- app.log (tail) ----"
           tail -n 250 app.log || true
           exit 1
-
-      - name: UI acceptance tests
-        run: mvn -B test --file pom.xml -pl ui-acceptance -Dgroups=acceptanceTest
 
       - name: OWASP ZAP Baseline Scan
         run: |
