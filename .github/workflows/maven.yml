@@ -66,8 +66,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
-      - name: Install Playwright browser dependencies
-        run: npx playwright@1.58.0 install --with-deps chromium
+      - name: Install Playwright system dependencies
+        run: npx playwright@1.58.0 install-deps chromium
 
       - name: Acceptance tests only (tagged)
         run: |
