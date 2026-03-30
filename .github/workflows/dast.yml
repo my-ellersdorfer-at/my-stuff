@@ -30,6 +30,9 @@ jobs:
         run: |
           ls -la acceptance/src/test/resources/keycloak/my-stuff.realm.json
 
+      - name: Install Playwright browser dependencies
+        run: npx playwright@1.58.0 install --with-deps chromium
+
       - name: Maven build + acceptance tests
         run: mvn -B clean verify --file pom.xml -Dgroups=acceptanceTest
 
