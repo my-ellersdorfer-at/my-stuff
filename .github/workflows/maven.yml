@@ -67,12 +67,7 @@ jobs:
             ${{ runner.os }}-maven
 
       - name: Install Playwright system dependencies
-        run: |
-          mvn -B -pl ui-acceptance -am -DskipTests \
-            org.codehaus.mojo:exec-maven-plugin:3.5.0:java \
-            -Dexec.classpathScope=test \
-            -Dexec.mainClass=com.microsoft.playwright.CLI \
-            -Dexec.args="install-deps chromium"
+        run: npx playwright@1.58.0 install-deps chromium
 
       - name: Acceptance tests only (tagged)
         run: |
